@@ -63,6 +63,12 @@ export const copy = {
     veteran: 'Vétéran',
     locked: (name: string, progress: string) => `${name}, pas encore obtenu (${progress})`,
   },
+  pwa: {
+    offline: 'Pas de réseau. Tu vois les dernières infos chargées.',
+    updateAvailable: 'Une nouvelle version est prête.',
+    reload: 'Mettre à jour',
+    later: 'Plus tard',
+  },
   common: {
     loading: 'Chargement…',
     close: 'Fermer',

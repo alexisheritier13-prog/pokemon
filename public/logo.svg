@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Provisional app mark: hexagonal chip (badge language) with radar arcs. Original design. -->
+  <path d="M256 40l187 108v216L256 472 69 364V148z" fill="#FFC93C" stroke="#1B2A4A" stroke-width="28" stroke-linejoin="round"/>
+  <path d="M256 112l125 72v144l-125 72-125-72V184z" fill="#FFFBF2"/>
+  <circle cx="256" cy="256" r="26" fill="#D63A28"/>
+  <path d="M206 206a71 71 0 0 1 100 0" fill="none" stroke="#1B2A4A" stroke-width="22" stroke-linecap="round"/>
+  <path d="M174 174a116 116 0 0 1 164 0" fill="none" stroke="#1B2A4A" stroke-width="22" stroke-linecap="round" opacity=".55"/>
+  <path d="M306 306a71 71 0 0 1-100 0" fill="none" stroke="#1B2A4A" stroke-width="22" stroke-linecap="round"/>
+</svg>
