@@ -1,29 +1,25 @@
-import { z } from 'zod'
+import * as z from 'zod/mini'
 
-// Empty strings from .env files mean "not set".
-const emptyToUndefined = (value: unknown) => (value === '' ? undefined : value)
-const optional = <T extends z.ZodType>(schema: T) =>
-  z.preprocess(emptyToUndefined, schema.optional())
-
+// zod/mini keeps the initial bundle small; full zod stays available inside lazy feature chunks.
 const envSchema = z.object({
   // Required from story 1.5 (Supabase) and 4.1 (push); optional until then.
-  VITE_SUPABASE_URL: optional(z.url()),
-  VITE_SUPABASE_ANON_KEY: optional(z.string().min(1)),
-  VITE_VAPID_PUBLIC_KEY: optional(z.string().min(1)),
-  VITE_GEOCODER_URL: z.preprocess(
-    emptyToUndefined,
-    z.url().default('https://data.geopf.fr/geocodage'),
-  ),
-  VITE_APP_ENV: z.preprocess(
-    emptyToUndefined,
-    z.enum(['local', 'preview', 'production']).default('local'),
-  ),
+  VITE_SUPABASE_URL: z.optional(z.url()),
+  VITE_SUPABASE_ANON_KEY: z.optional(z.string().check(z.minLength(1))),
+  VITE_VAPID_PUBLIC_KEY: z.optional(z.string().check(z.minLength(1))),
+  VITE_GEOCODER_URL: z._default(z.url(), 'https://data.geopf.fr/geocodage'),
+  VITE_APP_ENV: z._default(z.enum(['local', 'preview', 'production']), 'local'),
 })
 
 export type Env = z.infer<typeof envSchema>
 
+const keys = Object.keys(envSchema.def.shape) as Array<keyof Env>
+
 export function parseEnv(source: Record<string, unknown>): Env {
-  const result = envSchema.safeParse(source)
+  // Empty strings from .env files mean "not set".
+  const cleaned = Object.fromEntries(
+    keys.map((key) => [key, source[key] === '' ? undefined : source[key]]),
+  )
+  const result = envSchema.safeParse(cleaned)
   if (!result.success) {
     throw new Error(`Invalid environment variables:\n${z.prettifyError(result.error)}`)
   }

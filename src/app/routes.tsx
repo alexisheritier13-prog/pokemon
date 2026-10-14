@@ -1,7 +1,8 @@
 import type { RouteObject } from 'react-router'
-import { App } from './App'
-import { CanaryPage } from './CanaryPage'
+import { AppShell } from './AppShell'
+import { ErrorPage } from './ErrorPage'
 import { NotFoundPage } from './NotFoundPage'
+import { RouteSkeleton } from './RouteSkeleton'
 
 // Dev-only routes: statically false in production builds, so their chunks are never emitted.
 const devRoutes: RouteObject[] = import.meta.env.DEV
@@ -18,11 +19,38 @@ const devRoutes: RouteObject[] = import.meta.env.DEV
 export const routes: RouteObject[] = [
   {
     path: '/',
-    element: <App />,
+    element: <AppShell />,
+    errorElement: <ErrorPage />,
+    HydrateFallback: RouteSkeleton,
     children: [
-      { index: true, element: <CanaryPage /> },
-      ...devRoutes,
-      { path: '*', element: <NotFoundPage /> },
+      {
+        // Pathless layout so route errors render inside the shell (tab bar stays usable).
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            index: true,
+            lazy: async () => ({ Component: (await import('@/features/map/MapPage')).MapPage }),
+          },
+          {
+            path: 'fil',
+            lazy: async () => ({ Component: (await import('@/features/feed/FeedPage')).FeedPage }),
+          },
+          {
+            path: 'signaler',
+            lazy: async () => ({
+              Component: (await import('@/features/report/ReportPage')).ReportPage,
+            }),
+          },
+          {
+            path: 'compte',
+            lazy: async () => ({
+              Component: (await import('@/features/account/AccountPage')).AccountPage,
+            }),
+          },
+          ...devRoutes,
+          { path: '*', element: <NotFoundPage /> },
+        ],
+      },
     ],
   },
 ]

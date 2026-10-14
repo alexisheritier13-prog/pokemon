@@ -3,7 +3,11 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router/dom'
 import { Providers } from './app/providers'
 import { router } from './app/router'
+import { installGlobalErrorHandlers } from './lib/errorLogger'
+import { logClientError } from './lib/logger'
 import './index.css'
+
+installGlobalErrorHandlers(logClientError)
 
 const rootElement = document.getElementById('root')
 if (!rootElement) throw new Error('Root element #root not found')
