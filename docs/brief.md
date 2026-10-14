@@ -1,6 +1,6 @@
 # Project Brief: RestockRadar
 
-> Agent : Analyst (Mary) — BMAD v4.33 — mode YOLO, brouillon v0.1 du 2026-10-14
+> Agent : Analyst (Mary) — BMAD v4.33 — mode YOLO, v0.2 du 2026-10-14 (décisions du porteur intégrées)
 > Source : [`docs/input/initial-prompt.md`](input/initial-prompt.md). Ce brief en est la synthèse. Pour le détail fonctionnel et la direction artistique, le prompt reste la référence.
 > Nom de travail `RestockRadar`, centralisé dans une constante de config unique.
 
@@ -86,7 +86,7 @@ Reprise intégrale des 10 fonctionnalités V1 du prompt source, résumées ici :
 - Toute donnée de stock non communautaire (scraping, API marchandes).
 
 ### MVP Success Criteria
-La V1 est réussie si, sur la zone 84 et 13, un utilisateur installé (iOS ou Android) peut s'inscrire, recevoir une alerte push filtrée pour un signalement fait par un autre à ≤ 300 m d'un magasin, voter dessus, et si les règles métier (distance, rate limit, unicité des votes, réputation) tiennent face à un client modifié. Le tout doit passer Lighthouse ≥ 90 (voir la note PWA plus bas), avec un bundle initial < 200 ko gzip et un coût mensuel ≈ 0 €.
+La V1 est réussie si, sur la zone 84 et 13, un utilisateur installé (iOS ou Android) peut s'inscrire, recevoir une alerte push filtrée pour un signalement fait par un autre à ≤ 300 m d'un magasin, voter dessus, et si les règles métier (distance, rate limit, unicité des votes, réputation) tiennent face à un client modifié. Le tout doit passer Lighthouse ≥ 90 en Perf, A11y et Best Practices, plus la check-list d'installabilité PWA, avec un bundle initial < 200 ko gzip et un coût mensuel ≈ 0 €.
 
 ## Post-MVP Vision
 
@@ -136,7 +136,7 @@ Autres TCG (One Piece, Lorcana, Magic, Yu-Gi-Oh!), Belgique et Suisse francophon
 
 ### Key Risks
 - **Démarrage à froid :** sans signalements, l'app est vide et on la désinstalle. *Mitigation :* lancement ciblé auprès de communautés locales (boutiques TCG, Discord régionaux), pré-remplissage OSM soigné, états vides engageants, réputation visible.
-- **Récupération par les revendeurs :** l'app pourrait accélérer la razzia des scalpers. *Mitigation :* rayon limité, pas d'API publique, rate limits, alerte après confirmation par défaut *(à arbitrer)*.
+- **Récupération par les revendeurs :** l'app pourrait accélérer la razzia des scalpers. *Mitigation :* rayon limité, pas d'API publique, rate limits, alerte après 1re confirmation par défaut (décidé).
 - **Fausses positions GPS :** la règle des 300 m repose sur des coordonnées envoyées par le client, donc falsifiables. *Mitigation :* elle reste un filtre utile ; la défense réelle passe par les votes, la réputation, la modération et la détection d'incohérences (déplacements impossibles entre deux signalements).
 - **Propriété intellectuelle :** un design trop proche de l'univers officiel peut déclencher une réclamation de The Pokémon Company. *Mitigation :* revue IP de chaque style tile, aucun nom de Pokémon dans l'UI, mention de non-affiliation.
 - **Mise en pause Supabase :** l'offre gratuite suspend un projet après 7 jours sans activité. *Mitigation :* l'activité réelle et `pg_cron` devraient suffire, à surveiller (l'offre Pro coûte ~25 $/mois si besoin).
@@ -150,12 +150,17 @@ Comme demandé dans le prompt, je signale ces points sans rien changer :
 4. **Realtime et rayon :** les « Postgres Changes » de Supabase Realtime ne savent pas filtrer par distance. *Proposition :* abonnement aux insertions de `reports`, filtrage géographique côté client (suffisant sur deux départements), puis canaux par département quand on étendra à la France.
 5. **Tailwind :** partir sur **Tailwind v4** (tokens en variables CSS via `@theme`), cohérent avec l'exigence « tokens consommés par Tailwind, aucune valeur magique ».
 
+### Décisions du porteur (2026-10-14)
+- **Point 1 accepté** : Lighthouse ≥ 90 en Perf, A11y et Best Practices ; le critère « PWA » est remplacé par une check-list d'installabilité vérifiée.
+- **Points 2 à 5 non retenus, la stack imposée reste telle quelle** : Apple Sign-In **conservé en V1** (le porteur gère le compte Apple Developer), librairie **`web-push`** conservée (si le spike de phase 1 échoue sous Deno, on revient vers le porteur avant tout changement), version de Tailwind et choix Vercel/Netlify **non tranchés** (à reproposer à l'étape Architecture). Le point 4 (Realtime) n'est pas un changement de stack : c'est une contrainte technique, que l'architecte traitera.
+- **Consultation sans compte** : oui. Carte, fil et fiches sont lisibles anonymement ; le compte n'est exigé que pour signaler, voter, mettre en favori et recevoir des alertes.
+- **Votes** : **tous** les votes (« Confirmé », « Faux », « Plus rien ») exigent d'être à ≤ 300 m du magasin, avec vérification serveur.
+- **Mode push par défaut** : **à la 1re confirmation**, modifiable dans les préférences.
+
 ### Open Questions
 *Décisions produit non couvertes par le prompt, à trancher par le porteur :*
-- Consultation de la carte et du fil **sans compte** ? (Le prompt dit « lecture publique », ce qui pousse au oui, mais à confirmer pour le parcours d'onboarding.)
-- Le vote exige-t-il, lui aussi, d'être **à ≤ 300 m** du magasin ? Surtout pour « Plus rien », qui coupe les alertes, et pour « Faux », qui pénalise l'auteur.
-- Qu'est-ce qu'un vote « Plus rien » **valide** ? Un seul vote suffit-il ? Faut-il un vote de quelqu'un sur place, ou d'une réputation minimale ?
-- **Mode de push par défaut** : à la création ou à la 1re confirmation ? Le second limite les fausses alertes et le profit des revendeurs, mais retarde l'info.
+- Combien de votes « Plus rien » (faits sur place) faut-il pour basculer un report en épuisé ? Un seul, ou un seuil pondéré par la réputation ?
+- L'exception « haute réputation » (signalement à distance) s'applique-t-elle aussi aux votes ?
 - Seuils de réputation : niveau requis pour le **signalement à distance**, barème des points, paliers de badges. *(Peut être proposé par le PM puis validé.)*
 - Affichage public du **pseudo** des auteurs et du **prix constaté** ?
 - Objectifs chiffrés à 3 et 6 mois (les cibles ci-dessus sont des propositions).
