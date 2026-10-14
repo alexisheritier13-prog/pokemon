@@ -1,7 +1,7 @@
 # RestockRadar Fullstack Architecture Document
 
 > Agent : Architect (Winston) — BMAD v4.33 — v0.2 du 2026-10-14 — décisions D1 à D4 validées par le porteur
-> Entrées : [`docs/prd.md`](prd.md) v0.2, [`docs/front-end-spec.md`](front-end-spec.md) v1.0, [`docs/brief.md`](brief.md) v0.2.
+> Entrées : [`docs/prd.md`](prd.md) v0.4, [`docs/front-end-spec.md`](front-end-spec.md) v1.0, [`docs/brief.md`](brief.md) v0.2.
 
 ## Introduction
 
@@ -32,7 +32,7 @@ RestockRadar est une **SPA React servie en statique** (Vercel), transformée en 
 
 **Région :** Supabase `eu-west-3` (Paris), pour la latence et le RGPD. Vercel sert le front depuis son CDN mondial.
 
-**Décisions du porteur (validées le 2026-10-14 : Tailwind v4, Vercel, SMTP Resend, rétention des photos 60 jours)**
+**Décisions du porteur (2026-10-14 : Tailwind v4, Vercel, rétention des photos 60 jours validés ; SMTP (D3) reporté avant ouverture publique)**
 
 | # | Sujet | Recommandation | Alternative |
 |---|---|---|---|
@@ -2166,7 +2166,7 @@ En SQL : `private.raise_app(code, detail)` partout, sans jamais exposer d'erreur
 | Phase (prompt) | Epic PRD | Livrable vérifiable | Actions du porteur |
 |---|---|---|---|
 | 0 | — | Direction A + badges C, front-end spec ✅ | ✅ fait |
-| 1 | Epic 1 (7 stories) | App installable déployée, tokens et `/design`, schéma 0001-0008 + RLS, auth (3 fournisseurs), magasins 84/13 importés, spike `web-push` | Créer le projet Supabase (Paris), le repo GitHub et le projet Vercel ; configurer Google OAuth, Apple (Services ID + clé), SMTP Resend, les Redirect URLs |
+| 1 | Epic 1 (7 stories) | App installable déployée, tokens et `/design`, schéma de base (0001-0004 + RLS associée), auth (3 fournisseurs), magasins 84/13 importés, spike `web-push` | Créer le projet Supabase (Paris), le repo GitHub et le projet Vercel ; configurer Google OAuth, Apple (Services ID + clé), SMTP Resend, les Redirect URLs |
 | 2 | Epic 2 (9 stories) | Carte et liste, fiche, onboarding, signalement avec photo et règles serveur, proposition de magasin, heatmap, seed démo | Tester sur téléphone un signalement réel près d'un magasin |
 | 3 | Epic 3 (7 stories) | Fil temps réel, filtres, détail, votes, réputation, badges, holo, compte | Test à deux téléphones (vote sur place) |
 | 4 | Epic 4 (4 stories) | Push de bout en bout, préférences, guide iOS, notification de test | Générer les clés VAPID en prod, renseigner les secrets Edge et Vault, tester sur iPhone installé et sur Android |
@@ -2181,4 +2181,6 @@ Revue rapide avec `architect-checklist`. La passe complète sera faite par le PO
   - (2) magic link dans une PWA iOS : code OTP prévu ;
   - (3) limites Free (stockage photo, e-mails, mise en pause) : D3, D4 et surveillance ;
   - (4) fiabilité d'OpenFreeMap, sans SLA : l'URL des tuiles est dans le style JSON, donc facile à basculer (MapTiler ou Stadia en dernier recours, avec clé).
-- **Décisions D1 à D4 :** validées.
+- **Décisions :** D1, D2 et D4 validées. **D3 (SMTP) reportée** par le porteur : en local, Mailpit ; en prod avant ouverture, l'expéditeur par défaut ne livre qu'aux membres de l'équipe. **Bloquant pour l'ouverture publique** (check-list story 6.4).
+
+> **Note PO (2026-10-14) — migrations :** la numérotation 0001-0013 ci-dessus est un **regroupement logique** du schéma cible. En pratique, chaque story crée la ou les migrations dont elle a besoin, dans l'ordre des epics : 1.5 → 0001-0004 et la RLS associée ; 2.5 → reports, votes, fonctions cœur, jobs ; 4.x → push ; 5.x → modération. Le contenu SQL de référence reste celui de ce document.

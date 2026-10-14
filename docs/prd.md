@@ -25,6 +25,7 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 |---|---|---|---|
 | 2026-10-14 | 0.1 | Première version issue du brief v0.2 | PM (John) |
 | 2026-10-14 | 0.2 | Propositions validées en bloc par le porteur | PM (John) |
+| 2026-10-14 | 0.4 | Corrections PO : stories 1.3, 1.5, 1.6, 2.7, 5.1, 6.4 (tables de réglages, admin, OTP, SMTP reporté, purge photos, Santé, CI intégration) | PO (Sarah) |
 | 2026-10-14 | 0.3 | Écarts techniques de l'architecte : géocodeur Géoplateforme, JPEG sur Safari, vignette client | PM (John) |
 
 ## Requirements
@@ -271,7 +272,7 @@ so that je circule dans l'app d'une seule main.
 1: Une barre d'onglets basse donne accès à Carte, Fil et Compte, avec un bouton central « Signaler » mis en avant. Toutes les cibles font au moins 44 px.
 2: Les routes sont définies, et la carte comme l'admin sont **chargées à la demande** (le budget de bundle reste vert).
 3: Les zones sûres iOS (encoche, barre d'accueil) sont respectées en mode installé.
-4: Une page 404 et un écran d'erreur générique sont conçus avec le ton de l'app.
+4: Une page 404 et un écran d'erreur générique sont conçus avec le ton de l'app. Les erreurs JS non gérées sont journalisées en base (RPC `log_client_error`, limitée en fréquence), sans aucun service tiers.
 5: Le mode sombre suit automatiquement le système.
 
 ### Story 1.4 PWA installable
@@ -292,11 +293,12 @@ I want un schéma de base versionné, sécurisé par RLS et testable en local,
 so that les données sont protégées dès la première ligne.
 
 #### Acceptance Criteria
-1: La CLI Supabase est configurée pour un environnement local. Les migrations versionnées activent PostGIS et créent `profiles`, `games`, `products`, `stores` (avec `location geography(Point)`, `osm_id` unique, statut de validation) et `store_favorites`.
+1: La CLI Supabase est configurée pour un environnement local. Les migrations versionnées activent PostGIS et créent `profiles`, `user_settings` (zone arrondie à ~1 km par trigger), `alert_preferences`, `games`, `brands`, `products`, `stores` (avec `location geography(Point)`, `osm_ref` unique, statut de validation) et `store_favorites`, ainsi que la configuration `private.app_config` (voir l'architecture, migrations 0001 à 0004).
 2: La RLS est activée sur chaque table : lecture publique des magasins validés et des produits actifs, écriture limitée à ses propres données, et opérations admin réservées à un rôle.
 3: Les types TypeScript sont générés depuis le schéma.
 4: Des tests d'intégration vérifient les policies (anonyme, utilisateur, autre utilisateur, admin).
 5: Une **requête de recherche par rayon** (magasins à moins de X km d'un point) existe et est testée.
+6: Le workflow CI d'intégration (`supabase start` → migrations → tests Vitest d'intégration → contrôle que les types générés sont à jour) tourne sur chaque push.
 
 ### Story 1.6 Authentification et profil
 As a visiteur,
@@ -309,6 +311,9 @@ so that je peux contribuer à la communauté.
 3: Le visiteur anonyme accède à la carte, au fil et aux fiches. Une action réservée (signaler, voter, favori) l'invite à se connecter puis le ramène à son action.
 4: L'utilisateur peut se déconnecter.
 5: Le **spike `web-push` sous Deno** est réalisé dans une Edge Function de test, et son résultat est consigné. En cas d'échec, l'alerte est remontée au porteur.
+6: Dans l'app installée (PWA standalone), l'écran de connexion propose la **saisie du code à 6 chiffres** reçu par e-mail, en plus du lien (sur iOS, le lien s'ouvre dans Safari et non dans l'app).
+7: Une procédure documentée (SQL) permet de promouvoir le compte du porteur au rôle `admin`.
+8: **SMTP reporté (décision du porteur) :** en local, les e-mails sont lus dans Mailpit. En production, l'expéditeur par défaut de Supabase ne livre qu'aux membres de l'équipe, ce qui suffit pour les tests du porteur. Le SMTP (Resend) est **bloquant avant l'ouverture publique** (story 6.4).
 
 ### Story 1.7 Import des magasins OSM et catalogue initial
 As a porteur de projet,
@@ -410,6 +415,7 @@ so that il est plus crédible et me rapporte de la réputation.
 2: Une Edge Function reçoit la photo, vérifie le **type réel** (signature du fichier) et la taille maximale, puis la stocke dans un bucket dédié. Le fichier est rattaché au signalement.
 3: L'interface encourage la photo en affichant le bonus de réputation, sans la rendre obligatoire.
 4: Un échec d'upload n'empêche pas l'envoi du signalement sans photo, et l'utilisateur est prévenu.
+5: Les photos sont **supprimées automatiquement 60 jours** après le signalement (Edge Function `maintenance`, cron nocturne). Le signalement reste visible, sans photo. La durée est paramétrable (`photo_retention_days`).
 
 ### Story 2.8 Proposer un magasin manquant
 As a collectionneur,
@@ -580,6 +586,7 @@ so that il suit les sorties sans redéploiement.
 #### Acceptance Criteria
 1: Les routes `/admin` sont réservées au rôle admin, contrôlé **côté serveur** par RLS et RPC (pas seulement masquées dans l'UI), et chargées à la demande.
 2: Le catalogue s'édite en CRUD : jeu, nom, type, extension, ordre, image facultative uploadée (contrôle de type et de taille), et activation ou désactivation. Un produit désactivé disparaît des sélections sans casser l'historique.
+3: Un panneau **« Santé »** affiche les derniers passages des tâches planifiées, les statistiques push sur 24 h, les KPIs du brief et l'occupation de la base et du stockage par rapport aux limites gratuites.
 
 ### Story 5.2 Validation des magasins proposés
 As a admin,
@@ -675,7 +682,7 @@ so that je mets en ligne et maintiens l'app seul.
 
 #### Acceptance Criteria
 1: Le `README.md` couvre l'installation locale, les variables d'env, la création du projet Supabase cloud (extensions, providers Google et Apple, secrets, cron), le déploiement front, l'import OSM, la génération VAPID et la **procédure de test des push sur iPhone**.
-2: Une check-list de mise en production est fournie : domaine, URLs de redirection auth, e-mails, sauvegardes et surveillance de la mise en pause Supabase.
+2: Une check-list de mise en production est fournie : domaine, URLs de redirection auth, **SMTP Resend avec domaine vérifié (bloquant)**, modèle d'e-mail avec code OTP, sauvegardes et surveillance de la mise en pause Supabase.
 
 ---
 
