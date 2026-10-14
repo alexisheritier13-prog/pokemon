@@ -71,7 +71,7 @@ graph TD
 
 ### Navigation Structure
 
-**Navigation principale.** Une barre d'onglets basse fixe à 4 positions : **Carte**, **Fil**, un bouton central **Signaler** et **Compte**.
+**Navigation principale** (décision du porteur, 2026-10-14). Sur téléphone, la barre d'onglets basse a **3 positions : Carte, Signaler au centre, Fil**. Le **Compte** est un avatar rond en haut à droite. Sur ordinateur, le rail affiche Signaler, Carte, Fil et Compte.
 - Hauteur de 64 px, plus la zone sûre du bas.
 - Le bouton Signaler est un « bouton-objet » rouge de 60 px qui déborde de 12 px au-dessus de la barre (relief A).
 - L'onglet actif porte un fond de jeton papier et un libellé en gras. Les libellés restent toujours visibles (pas d'icône seule).

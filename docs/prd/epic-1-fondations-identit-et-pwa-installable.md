@@ -34,7 +34,7 @@ I want une navigation au pouce entre les grandes sections,
 so that je circule dans l'app d'une seule main.
 
 ### Acceptance Criteria
-1: Une barre d'onglets basse donne accès à Carte, Fil et Compte, avec un bouton central « Signaler » mis en avant. Toutes les cibles font au moins 44 px.
+1: Une barre d'onglets basse donne accès à Carte et Fil, avec un bouton central « Signaler » mis en avant ; le Compte est un avatar en haut à droite (rail complet sur ordinateur). Toutes les cibles font au moins 44 px. *(Décision du porteur du 2026-10-14 : 3 onglets + avatar, pour que Signaler soit centré.)*
 2: Les routes sont définies, et la carte comme l'admin sont **chargées à la demande** (le budget de bundle reste vert).
 3: Les zones sûres iOS (encoche, barre d'accueil) sont respectées en mode installé.
 4: Une page 404 et un écran d'erreur générique sont conçus avec le ton de l'app. Les erreurs JS non gérées sont journalisées en base (RPC `log_client_error`, limitée en fréquence), sans aucun service tiers.

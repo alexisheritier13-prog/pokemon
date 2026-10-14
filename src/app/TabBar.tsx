@@ -9,16 +9,17 @@ import { NavLink, useLocation } from 'react-router'
 import { copy } from '@/copy/fr'
 import { cn } from '@/lib/cn'
 
-type Tab = { to: string; label: string; icon: Icon; end?: boolean }
+type Tab = { to: string; label: string; icon: Icon; end?: boolean; desktopOnly?: boolean }
 
+// Phone: Carte · Signaler (centered) · Fil. Account lives in the top-right avatar (AccountButton).
+// Desktop rail: Signaler on top, then Carte, Fil, and Compte (there is room for it).
 const tabs: Tab[] = [
   { to: '/', label: copy.nav.map, icon: MapTrifoldIcon, end: true },
-  { to: '/fil', label: copy.nav.feed, icon: CardsIcon },
   { to: '/signaler', label: copy.nav.report, icon: PlusIcon },
-  { to: '/compte', label: copy.nav.account, icon: UserCircleIcon },
+  { to: '/fil', label: copy.nav.feed, icon: CardsIcon },
+  { to: '/compte', label: copy.nav.account, icon: UserCircleIcon, desktopOnly: true },
 ]
 
-// Bottom tab bar on phones (thumb zone), vertical rail from 1024px. Labels are always visible.
 export function TabBar() {
   const { pathname } = useLocation()
 
@@ -34,7 +35,7 @@ export function TabBar() {
         'lg:sticky lg:top-0 lg:h-dvh lg:w-28 lg:shrink-0 lg:border-t-0 lg:border-r-3 lg:pt-[env(safe-area-inset-top)] lg:pb-0',
       )}
     >
-      <ul className="grid h-16 grid-cols-4 items-center lg:mt-6 lg:flex lg:h-auto lg:flex-col lg:gap-3">
+      <ul className="grid h-16 grid-cols-3 items-center lg:mt-6 lg:flex lg:h-auto lg:flex-col lg:gap-3">
         {tabs.map((tab) =>
           tab.to === '/signaler' ? (
             <li key={tab.to} className="flex justify-center lg:order-first lg:mb-4">
@@ -58,7 +59,10 @@ export function TabBar() {
               </NavLink>
             </li>
           ) : (
-            <li key={tab.to} className="flex justify-center">
+            <li
+              key={tab.to}
+              className={cn('flex justify-center', tab.desktopOnly && 'hidden lg:mt-auto lg:flex')}
+            >
               <NavLink
                 to={tab.to}
                 end={tab.end}

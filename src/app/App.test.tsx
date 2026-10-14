@@ -13,12 +13,15 @@ function renderAt(path: string) {
 }
 
 describe('app shell', () => {
-  it('shows the four tabs with visible labels and the non-affiliation notice', async () => {
+  it('shows Carte, Signaler (centered) and Fil, plus the account avatar and the notice', async () => {
     renderAt('/')
     const nav = await screen.findByRole('navigation', { name: 'Navigation principale' })
-    for (const name of ['Carte', 'Fil', 'Signaler', 'Compte']) {
-      expect(nav).toContainElement(screen.getByRole('link', { name }))
-    }
+    const tabLabels = Array.from(nav.querySelectorAll('li:not(.hidden) a')).map(
+      (a) => a.textContent,
+    )
+    expect(tabLabels).toEqual(['Carte', 'Signaler', 'Fil'])
+    // Avatar outside the tab bar (phones) + rail entry (desktop only, hidden on phones).
+    expect(screen.getAllByRole('link', { name: 'Compte' })).toHaveLength(2)
     expect(screen.getByText(/non affilié à Nintendo, The Pokémon Company/)).toBeInTheDocument()
     expect(screen.getByText(`Version ${APP_VERSION}`)).toBeInTheDocument()
   })
@@ -35,7 +38,7 @@ describe('app shell', () => {
   it('navigates between tabs', async () => {
     renderAt('/')
     await screen.findByRole('heading', { name: 'La carte arrive' })
-    await userEvent.click(screen.getByRole('link', { name: 'Compte' }))
+    await userEvent.click(screen.getAllByRole('link', { name: 'Compte' })[0]!)
     expect(await screen.findByRole('heading', { name: 'Ta carte de chasseur' })).toBeInTheDocument()
   })
 

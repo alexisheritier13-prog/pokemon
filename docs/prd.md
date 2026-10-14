@@ -139,7 +139,7 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 Une app de poche qu'on dégaine au rayon et qu'on consulte avant de prendre la voiture. **Ludique mais lisible** : on doit sentir l'univers « collection et aventure », avec des formes généreuses, des boutons qu'on a envie de presser et des cartes de signalement qui rappellent les cartes à collectionner. La lecture d'une info doit rester **immédiate** : statut, magasin, distance, fraîcheur et fiabilité en un coup d'œil. Le ton est complice (« Restock repéré ! », « Fausse piste »), jamais lourd. La direction artistique détaillée (contraintes, à-éviter, composants signature) est dans le prompt source et sera instanciée par l'UX Expert en phase 0.
 
 ### Key Interaction Paradigms
-- **Barre d'onglets basse** à 4 entrées (Carte, Fil, Compte, et un **bouton central « Signaler »** mis en avant), tenue au pouce.
+- **Barre d'onglets basse** à 3 entrées (Carte, **bouton central « Signaler »**, Fil), tenue au pouce ; **Compte en avatar** en haut à droite.
 - **Carte ↔ fiche** : un tap sur un marqueur ouvre une **feuille glissante** (aperçu), qu'on tire pour la fiche complète, avec une transition continue.
 - **Signalement en 3 temps**, sur un seul écran progressif : magasin présélectionné, produits en jetons multi-sélection, statut en gros boutons. Photo et commentaire viennent en option, puis l'envoi déclenche un rebond de validation.
 - **Vote en un tap** depuis la carte de signalement, avec une célébration discrète quand on confirme.
@@ -269,7 +269,7 @@ I want une navigation au pouce entre les grandes sections,
 so that je circule dans l'app d'une seule main.
 
 #### Acceptance Criteria
-1: Une barre d'onglets basse donne accès à Carte, Fil et Compte, avec un bouton central « Signaler » mis en avant. Toutes les cibles font au moins 44 px.
+1: Une barre d'onglets basse donne accès à Carte et Fil, avec un bouton central « Signaler » mis en avant ; le Compte est un avatar en haut à droite (rail complet sur ordinateur). Toutes les cibles font au moins 44 px. *(Décision du porteur du 2026-10-14 : 3 onglets + avatar, pour que Signaler soit centré.)*
 2: Les routes sont définies, et la carte comme l'admin sont **chargées à la demande** (le budget de bundle reste vert).
 3: Les zones sûres iOS (encoche, barre d'accueil) sont respectées en mode installé.
 4: Une page 404 et un écran d'erreur générique sont conçus avec le ton de l'app. Les erreurs JS non gérées sont journalisées en base (RPC `log_client_error`, limitée en fréquence), sans aucun service tiers.

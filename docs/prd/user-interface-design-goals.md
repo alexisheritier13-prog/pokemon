@@ -4,7 +4,7 @@
 Une app de poche qu'on dégaine au rayon et qu'on consulte avant de prendre la voiture. **Ludique mais lisible** : on doit sentir l'univers « collection et aventure », avec des formes généreuses, des boutons qu'on a envie de presser et des cartes de signalement qui rappellent les cartes à collectionner. La lecture d'une info doit rester **immédiate** : statut, magasin, distance, fraîcheur et fiabilité en un coup d'œil. Le ton est complice (« Restock repéré ! », « Fausse piste »), jamais lourd. La direction artistique détaillée (contraintes, à-éviter, composants signature) est dans le prompt source et sera instanciée par l'UX Expert en phase 0.
 
 ## Key Interaction Paradigms
-- **Barre d'onglets basse** à 4 entrées (Carte, Fil, Compte, et un **bouton central « Signaler »** mis en avant), tenue au pouce.
+- **Barre d'onglets basse** à 3 entrées (Carte, **bouton central « Signaler »**, Fil), tenue au pouce ; **Compte en avatar** en haut à droite.
 - **Carte ↔ fiche** : un tap sur un marqueur ouvre une **feuille glissante** (aperçu), qu'on tire pour la fiche complète, avec une transition continue.
 - **Signalement en 3 temps**, sur un seul écran progressif : magasin présélectionné, produits en jetons multi-sélection, statut en gros boutons. Photo et commentaire viennent en option, puis l'envoi déclenche un rebond de validation.
 - **Vote en un tap** depuis la carte de signalement, avec une célébration discrète quand on confirme.
