@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Initial JS bundle (entry chunk)",
+    "path": "dist/assets/index-*.js",
+    "limit": "200 kB",
+    "gzip": true
+  }
+]

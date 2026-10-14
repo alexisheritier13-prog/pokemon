@@ -5,9 +5,9 @@ Les versions sont **épinglées à la story 1.1** (dernière version stable de l
 ## Technology Stack Table
 | Category | Technology | Version | Purpose | Rationale |
 |---|---|---|---|---|
-| Frontend Language | TypeScript | 5.x (strict) | Typage du front et des scripts | Imposé, sécurité de refactor |
+| Frontend Language | TypeScript | 6.0.x (strict) | Typage du front et des scripts | Imposé, sécurité de refactor |
 | Frontend Framework | React | 19.x | UI | Imposé |
-| Build | Vite | dernière majeure stable | Bundling, dev server | Imposé, rapide |
+| Build | Vite | 8.x | Bundling, dev server | Imposé, rapide |
 | UI Component Library | Composants maison + `vaul` (feuilles) + `@radix-ui/react-dialog` | dernière | Primitives accessibles sans style | Pas de look shadcn par défaut (front-end spec) |
 | CSS | Tailwind CSS | **4.x (D1)** | Utilitaires branchés sur les tokens | Imposé, tokens via `@theme` |
 | Icônes | `@phosphor-icons/react` (Bold) | 2.x | Iconographie | Front-end spec |
@@ -27,7 +27,7 @@ Les versions sont **épinglées à la story 1.1** (dernière version stable de l
 | File Storage | Supabase Storage | — | Photos, images produits | Imposé |
 | Authentication | Supabase Auth | — | Magic link, Google, Apple | Imposé |
 | Push | `web-push` (npm, via `npm:`) | 3.x | Web Push VAPID | **Imposé, spike story 1.6** |
-| Frontend Testing | Vitest + Testing Library | dernière | Logique pure, composants | Imposé |
+| Frontend Testing | Vitest + Testing Library | 5.x / 16.x | Logique pure, composants | Imposé |
 | Backend Testing | Vitest (intégration supabase-js sur `supabase start`) | dernière | RPC, RLS, triggers | Teste comme le client réel |
 | E2E Testing | Playwright + `@axe-core/playwright` | 1.x | 4 parcours + a11y | Imposé |
 | Lint / Format | ESLint (flat config) + Prettier | 9.x / 3.x | Qualité | Imposé |
@@ -35,3 +35,5 @@ Les versions sont **épinglées à la story 1.1** (dernière version stable de l
 | CI/CD | GitHub Actions + intégration Git Vercel | — | Checks, tests, deploy | Gratuit |
 | Monitoring | Logs Supabase + tables internes + panneau admin « Santé » | — | Observabilité sans tracker tiers | NFR7 |
 | Logging front | RPC `log_client_error` (limitée) | — | Erreurs JS en base | Aucun SaaS tiers |
+
+> Mise à jour story 1.1 (2026-10-14) : Node.js **24 LTS** (`.nvmrc`), TypeScript 6.0, Vite 8, Vitest 5, React 19.3, React Router 7.18, TanStack Query 5, Zod 4.6, Tailwind 4.3. Versions exactes dans `package-lock.json`.
