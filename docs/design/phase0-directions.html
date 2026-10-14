@@ -12,7 +12,7 @@
   /* ── Direction A · Classeur ── */
   --a-bg:#F6EFDF; --a-bg2:#EDE2C8; --a-card:#FFFBF2; --a-ink:#1B2A4A; --a-ink2:#4A5876;
   --a-red:#D63A28; --a-red-d:#9C2516; --a-yel:#FFC93C; --a-yel-d:#C98F00;
-  --a-ok:#2E8F55; --a-low:#E07B16; --a-out:#D63A28; --a-none:#8E95A6; --a-soon:#2F6FCC; --a-on:#FFFFFF;
+  --a-ok:#237A46; --a-low:#E07B16; --a-out:#D63A28; --a-none:#737B8F; --a-soon:#2F6FCC; --a-on:#FFFFFF; --a-onred:#FFFFFF;
   --f-a-disp:"Fredoka","Nunito",ui-rounded,system-ui,sans-serif; --f-a-body:"Figtree",system-ui,sans-serif;
 
   /* ── Direction B · Expédition ── */
@@ -30,7 +30,7 @@
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
   --pg-bg:#12151D; --pg-surface:#1A1E29; --pg-fg:#E9EBF1; --pg-muted:#A1A8B9; --pg-line:#2B3140; --pg-accent:#FF6A55;
   --a-bg:#0F1830; --a-bg2:#16213F; --a-card:#1C2A4E; --a-ink:#F3EAD6; --a-ink2:#AEB6CB; --a-red:#FF5A45; --a-red-d:#8E1F12; --a-yel:#FFD25A; --a-yel-d:#A87800;
-  --a-ok:#4CC57E; --a-low:#FFA24A; --a-out:#FF5A45; --a-none:#6F7893; --a-soon:#6FA8FF; --a-on:#0F1830;
+  --a-ok:#4CC57E; --a-low:#FFA24A; --a-out:#FF5A45; --a-none:#6F7893; --a-soon:#6FA8FF; --a-on:#0F1830; --a-onred:#0F1830;
   --b-bg:#0B1F24; --b-bg2:#11303A; --b-card:#143640; --b-ink:#EAF4EF; --b-ink2:#A3BDBA; --b-fire:#FF6B47; --b-fire-d:#A3301A; --b-volt:#FFDA5C; --b-water:#45B8D4; --b-grass:#5BC27A; --b-psy:#C784D8;
   --b-ok:#5BC27A; --b-low:#FFA640; --b-out:#FF6B47; --b-none:#6E8790; --b-soon:#45B8D4; --b-on:#0B1F24;
   --c-bg:#0E1426; --c-bg2:#141C33; --c-card:#18213B; --c-screen:#0B2B2A; --c-ink:#E9EEF8; --c-ink2:#9AA6C4; --c-red:#FF5B4D; --c-red-d:#9B2419; --c-lamp:#FFCF4A; --c-radar:#5BE3B0; --c-glow:rgba(91,227,176,.35);
@@ -40,7 +40,7 @@
 :root[data-theme="dark"]{
   --pg-bg:#12151D; --pg-surface:#1A1E29; --pg-fg:#E9EBF1; --pg-muted:#A1A8B9; --pg-line:#2B3140; --pg-accent:#FF6A55;
   --a-bg:#0F1830; --a-bg2:#16213F; --a-card:#1C2A4E; --a-ink:#F3EAD6; --a-ink2:#AEB6CB; --a-red:#FF5A45; --a-red-d:#8E1F12; --a-yel:#FFD25A; --a-yel-d:#A87800;
-  --a-ok:#4CC57E; --a-low:#FFA24A; --a-out:#FF5A45; --a-none:#6F7893; --a-soon:#6FA8FF; --a-on:#0F1830;
+  --a-ok:#4CC57E; --a-low:#FFA24A; --a-out:#FF5A45; --a-none:#6F7893; --a-soon:#6FA8FF; --a-on:#0F1830; --a-onred:#0F1830;
   --b-bg:#0B1F24; --b-bg2:#11303A; --b-card:#143640; --b-ink:#EAF4EF; --b-ink2:#A3BDBA; --b-fire:#FF6B47; --b-fire-d:#A3301A; --b-volt:#FFDA5C; --b-water:#45B8D4; --b-grass:#5BC27A; --b-psy:#C784D8;
   --b-ok:#5BC27A; --b-low:#FFA640; --b-out:#FF6B47; --b-none:#6E8790; --b-soon:#45B8D4; --b-on:#0B1F24;
   --c-bg:#0E1426; --c-bg2:#141C33; --c-card:#18213B; --c-screen:#0B2B2A; --c-ink:#E9EEF8; --c-ink2:#9AA6C4; --c-red:#FF5B4D; --c-red-d:#9B2419; --c-lamp:#FFCF4A; --c-radar:#5BE3B0; --c-glow:rgba(91,227,176,.35);
@@ -99,14 +99,14 @@ section.block>h2{font-size:26px;letter-spacing:-.01em}
 .ta .spec-d{font:600 30px/1.05 var(--f-a-disp);font-variation-settings:"wdth" 115}
 .ta .spec-b{font-size:15.5px;color:var(--a-ink2)}
 .a-btn{font:600 17px/1 var(--f-a-disp);font-variation-settings:"wdth" 108;border:3px solid var(--a-ink);border-radius:18px;padding:0 22px;min-height:52px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;transition:transform 90ms ease,box-shadow 90ms ease}
-.a-btn.primary{background:var(--a-red);color:#fff;box-shadow:0 5px 0 var(--a-ink),0 10px 18px -6px color-mix(in srgb,var(--a-red) 55%,transparent)}
+.a-btn.primary{background:var(--a-red);color:var(--a-onred);box-shadow:0 5px 0 var(--a-ink),0 10px 18px -6px color-mix(in srgb,var(--a-red) 55%,transparent)}
 .a-btn.second{background:var(--a-card);color:var(--a-ink);box-shadow:0 5px 0 var(--a-ink)}
 .a-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--a-ink)}
 .a-chip{font:600 14px/1 var(--f-a-body);border:2px solid var(--a-ink);border-radius:999px;padding:0 14px;min-height:44px;display:inline-flex;align-items:center;gap:6px;background:var(--a-card);color:var(--a-ink)}
 .a-chip[aria-pressed="true"]{background:var(--a-yel);color:#1B2A4A;border-color:var(--a-ink)}
 /* report card */
 .a-card{position:relative;background:var(--a-card);border:3px solid var(--a-ink);border-radius:24px;padding:10px;box-shadow:0 7px 0 var(--a-ink);max-width:340px;isolation:isolate}
-.a-band{display:flex;align-items:center;justify-content:space-between;background:var(--a-ok);color:#fff;border-radius:14px;padding:8px 12px;font:600 15px/1 var(--f-a-disp);font-variation-settings:"wdth" 118;letter-spacing:.02em}
+.a-band{display:flex;align-items:center;justify-content:space-between;background:var(--a-ok);color:var(--a-on);border-radius:14px;padding:8px 12px;font:600 15px/1 var(--f-a-disp);font-variation-settings:"wdth" 118;letter-spacing:.02em}
 .a-band .rar{display:flex;gap:2px;color:var(--a-yel)}
 .a-art{margin-top:8px;border:2px solid var(--a-ink);border-radius:16px;height:150px;overflow:hidden;position:relative;background:linear-gradient(var(--a-bg2) 0 0)}
 .a-meta{padding:10px 4px 2px;display:flex;flex-direction:column;gap:6px}
@@ -255,6 +255,24 @@ section.block>h2{font-size:26px;letter-spacing:-.01em}
   </div>
 </header>
 
+<section class="block" aria-labelledby="chosen-h">
+  <span class="eyebrow">Choix du porteur · 14 octobre 2026</span>
+  <h2 id="chosen-h">Retenu : A · Classeur, avec les badges hexagonaux de C</h2>
+  <div class="tile ta">
+    <div class="tile-head">
+      <span class="tag">Badges · puces hexagonales tracées à l'encre</span>
+      <p>La forme de C reprend le langage de A : contour encre épais, cœur papier, emblème au trait dans la couleur du badge. Éclaireur et Vétéran portent le holo. Un badge non obtenu est en pointillé, avec sa progression. Les couleurs de A ont aussi été ajustées pour les contrastes AA : vert plus profond, gris plus sombre, icône encre sur l'orange, et en sombre un texte bleu nuit sur le bouton rouge.</p>
+    </div>
+    <div class="row" style="gap:20px">
+      <div class="badge-cap"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M32 4l24 14v28L32 60 8 46V18z" fill="var(--a-ok)" stroke="var(--a-ink)" stroke-width="3.5" stroke-linejoin="round"/><path d="M32 13l16 9.5v19L32 51l-16-9.5v-19z" fill="var(--a-card)"/><g transform="translate(20 20)" stroke="var(--a-ok)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c0-9 5-15 18-16-.5 11-6 17-16 17"/><path d="M3 21l8-8"/></g></svg>Nouveau<small>premiers pas</small></div>
+      <div class="badge-cap"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M32 4l24 14v28L32 60 8 46V18z" fill="var(--a-soon)" stroke="var(--a-ink)" stroke-width="3.5" stroke-linejoin="round"/><path d="M32 13l16 9.5v19L32 51l-16-9.5v-19z" fill="var(--a-card)"/><path d="M24 32l6 6 11-13" stroke="var(--a-soon)" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Fiable<small>30 pts · 80 %</small></div>
+      <div class="badge-cap"><div class="holo idle" data-holo style="position:relative;border-radius:16px;line-height:0"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M32 4l24 14v28L32 60 8 46V18z" fill="var(--a-yel)" stroke="var(--a-ink)" stroke-width="3.5" stroke-linejoin="round"/><path d="M32 13l16 9.5v19L32 51l-16-9.5v-19z" fill="var(--a-card)"/><g transform="translate(18 18)" stroke="var(--a-red)" stroke-width="3" fill="none" stroke-linejoin="round"><circle cx="14" cy="14" r="10.5"/><path d="M19 9l-3 7-7 3 3-7z" fill="var(--a-red)"/></g></svg></div>Éclaireur<small>holo</small></div>
+      <div class="badge-cap"><div class="holo idle" data-holo style="position:relative;border-radius:16px;line-height:0"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M32 4l24 14v28L32 60 8 46V18z" fill="var(--a-red)" stroke="var(--a-ink)" stroke-width="3.5" stroke-linejoin="round"/><path d="M32 13l16 9.5v19L32 51l-16-9.5v-19z" fill="var(--a-card)"/><g fill="var(--a-red)"><path d="M32 20c.5 4 2 5.5 6 6-4 .5-5.5 2-6 6-.5-4-2-5.5-6-6 4-.5 5.5-2 6-6z"/><path d="M24 33c.3 2.4 1.2 3.3 3.6 3.6-2.4.3-3.3 1.2-3.6 3.6-.3-2.4-1.2-3.3-3.6-3.6 2.4-.3 3.3-1.2 3.6-3.6z"/><path d="M40 33c.3 2.4 1.2 3.3 3.6 3.6-2.4.3-3.3 1.2-3.6 3.6-.3-2.4-1.2-3.3-3.6-3.6 2.4-.3 3.3-1.2 3.6-3.6z"/></g></svg></div>Vétéran<small>150 pts · holo</small></div>
+      <div class="badge-cap"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M32 4l24 14v28L32 60 8 46V18z" fill="none" stroke="var(--a-ink2)" stroke-width="3" stroke-dasharray="5 5" stroke-linejoin="round" opacity=".55"/><text x="32" y="37" text-anchor="middle" font-family="Figtree,system-ui,sans-serif" font-size="12" font-weight="700" fill="var(--a-ink2)">18/30</text></svg>Fiable<small>verrouillé</small></div>
+    </div>
+  </div>
+</section>
+
 <section class="block" aria-labelledby="mb">
   <span class="eyebrow">Veille</span>
   <h2 id="mb">Moodboard commenté</h2>
@@ -361,7 +379,7 @@ section.block>h2{font-size:26px;letter-spacing:-.01em}
         <span class="lbl">Marqueurs · étiquettes de prix</span>
         <div class="row" style="gap:18px">
           <div class="mk-cap"><div class="a-mk" style="background:var(--a-ok)"><svg class="i"><use href="#i-check"/></svg></div>En stock</div>
-          <div class="mk-cap"><div class="a-mk" style="background:var(--a-low)"><svg class="i"><use href="#i-low"/></svg></div>Faible</div>
+          <div class="mk-cap"><div class="a-mk" style="background:var(--a-low);color:#1B2A4A"><svg class="i"><use href="#i-low"/></svg></div>Faible</div>
           <div class="mk-cap"><div class="a-mk" style="background:var(--a-out)"><svg class="i"><use href="#i-x"/></svg></div>Épuisé</div>
           <div class="mk-cap"><div class="a-mk" style="background:var(--a-soon)"><svg class="i"><use href="#i-clock"/></svg></div>Annoncé</div>
           <div class="mk-cap"><div class="a-mk" style="background:var(--a-none)"><svg class="i"><use href="#i-dash"/></svg></div>Rien</div>
