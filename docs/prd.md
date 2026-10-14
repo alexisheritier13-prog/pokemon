@@ -25,6 +25,7 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 |---|---|---|---|
 | 2026-10-14 | 0.1 | Première version issue du brief v0.2 | PM (John) |
 | 2026-10-14 | 0.2 | Propositions validées en bloc par le porteur | PM (John) |
+| 2026-10-14 | 0.3 | Écarts techniques de l'architecte : géocodeur Géoplateforme, JPEG sur Safari, vignette client | PM (John) |
 
 ## Requirements
 
@@ -49,7 +50,7 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 - **FR12 :** Le serveur **refuse** tout signalement fait à plus de 300 m du magasin et ne stocke que la distance (`reporter_distance_m`), jamais les coordonnées. Exception : un utilisateur au-dessus du seuil de réputation « signalement à distance » peut signaler de plus loin. Son signalement porte alors le marqueur visible « signalé à distance ».
 - **FR13 :** Limites appliquées par le serveur : **10 signalements par heure** et par utilisateur, **1 signalement toutes les 30 minutes** par utilisateur et par magasin. Un refus affiche un message explicite indiquant quand réessayer.
 - **FR14 :** Un signalement expire par défaut **6 h** après sa création. Un job planifié toutes les 15 minutes expire les signalements et recalcule les statistiques des magasins.
-- **FR15 :** La photo est redimensionnée côté client (≤ 1600 px, WebP), sans **aucune métadonnée EXIF**. Le serveur vérifie le type réel et la taille avant stockage. Un signalement avec photo rapporte un bonus de réputation.
+- **FR15 :** La photo est redimensionnée côté client (≤ 1600 px, WebP, ou JPEG sur Safari qui ne sait pas encoder le WebP), avec une vignette de 480 px, sans **aucune métadonnée EXIF**. Le serveur vérifie le type réel et la taille avant stockage. Un signalement avec photo rapporte un bonus de réputation.
 
 **Fil et détail**
 - **FR16 :** Le fil liste en temps réel, du plus récent au plus ancien, les signalements valides dans le rayon de l'utilisateur. Sans compte ni position, il se cale sur le rayon par défaut autour de la ville saisie, ou sur la zone de lancement.
@@ -210,7 +211,7 @@ Chaque epic ajoute ses tests au fil de l'eau. L'epic 6 ne fait que consolider.
   - Zod, ESLint, Prettier, Vitest, Playwright.
 - **À trancher à l'étape Architecture** : version de Tailwind (v3 ou v4) et hébergeur front (Vercel ou Netlify).
 - **Spike obligatoire en phase 1** : `web-push` dans une Edge Function Deno. En cas d'échec, retour vers le porteur avant tout changement de librairie.
-- **Géocodage de repli** (ville ou code postal) : **API Adresse de l'État (BAN, `api-adresse.data.gouv.fr`)**, gratuite et sans clé. **[VALIDÉ]**
+- **Géocodage de repli** (ville ou code postal) : **géocodeur de la Géoplateforme IGN (`data.geopf.fr/geocodage`)**, successeur de l'API Adresse décommissionnée fin janvier 2026, gratuit et sans clé. **[VALIDÉ, mis à jour par l'architecte]**
 - **Horaires** : format `opening_hours` d'OSM, parsé côté client, et modifiable par l'admin.
 - **Catalogue** : tables `games` et `products` (la notion de jeu existe dès la V1 pour préparer One Piece, Lorcana et Magic). Seed initial d'une trentaine de produits Pokémon génériques, sans visuel.
 - **Schéma prêt pour la V2** : la table de statistiques par magasin (agrégats jour × heure) est alimentée dès la V1 par le job `pg_cron`. Elle sert la heatmap et servira la prédiction.
@@ -335,7 +336,7 @@ so that je repère où aller.
 
 #### Acceptance Criteria
 1: La carte MapLibre (tuiles OpenFreeMap, attribution OSM visible) se charge à la demande et affiche les magasins validés en clusters.
-2: La position est demandée **après une explication**, au moment de l'action. Sans consentement, un champ ville ou code postal (API Adresse) centre la carte.
+2: La position est demandée **après une explication**, au moment de l'action. Sans consentement, un champ ville ou code postal (géocodeur Géoplateforme) centre la carte.
 3: Le bouton « autour de moi » recentre la carte sur la position.
 4: Le tap sur un marqueur ouvre une feuille d'aperçu (nom, enseigne, distance, statut).
 5: En attendant les signalements (epic 2.5), tous les marqueurs sont gris (« rien de récent »). Leur forme se distingue par statut, sans dépendre de la couleur seule.
@@ -405,7 +406,7 @@ I want ajouter une photo de rayon à mon signalement,
 so that il est plus crédible et me rapporte de la réputation.
 
 #### Acceptance Criteria
-1: La photo vient de l'appareil photo ou de la galerie. Elle est compressée côté client en WebP (≤ 1600 px), et **aucune métadonnée EXIF** n'est conservée (vérifié par un test).
+1: La photo vient de l'appareil photo ou de la galerie. Elle est compressée côté client en WebP, ou en JPEG sur Safari (≤ 1600 px, plus une vignette de 480 px), et **aucune métadonnée EXIF** n'est conservée (vérifié par un test).
 2: Une Edge Function reçoit la photo, vérifie le **type réel** (signature du fichier) et la taille maximale, puis la stocke dans un bucket dédié. Le fichier est rattaché au signalement.
 3: L'interface encourage la photo en affichant le bonus de réputation, sans la rendre obligatoire.
 4: Un échec d'upload n'empêche pas l'envoi du signalement sans photo, et l'utilisateur est prévenu.
@@ -416,7 +417,7 @@ I want proposer un magasin absent de la carte,
 so that ma boutique TCG locale soit couverte.
 
 #### Acceptance Criteria
-1: Le formulaire recueille nom, enseigne (liste fermée, plus « indépendant »), adresse (autocomplétion via l'API Adresse) et ajustement de la position sur la carte.
+1: Le formulaire recueille nom, enseigne (liste fermée, plus « indépendant »), adresse (autocomplétion via le géocodeur Géoplateforme) et ajustement de la position sur la carte.
 2: Le magasin est créé « en attente ». Il n'est visible que de son auteur (marqué « en attente ») jusqu'à sa validation.
 3: Les doublons évidents (même enseigne à moins de 100 m) sont signalés à l'utilisateur avant l'envoi.
 
