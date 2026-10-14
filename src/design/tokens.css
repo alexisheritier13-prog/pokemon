@@ -1,0 +1,203 @@
+/*
+ * Design tokens: direction "Classeur" (A) with hexagonal badges (C).
+ * Source of truth: docs/front-end-spec.md, "Branding & Style Guide".
+ * Raw values live in :root (light) and the two dark blocks; Tailwind maps them
+ * through `@theme inline` so utilities follow the active theme without `dark:`.
+ * Components must use these tokens only: no literal colors, sizes, radii or durations.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* surfaces & ink */
+  --paper: #f6efdf;
+  --paper-2: #ede2c8;
+  --card: #fffbf2;
+  --ink: #1b2a4a;
+  --ink-2: #4a5876;
+  --shadow-solid: #1b2a4a;
+
+  /* action & accent */
+  --red: #d63a28;
+  --on-red: #ffffff;
+  --red-glow: #9c2516;
+  --yellow: #ffc93c;
+  --on-yellow: #1b2a4a;
+  --focus: #2f6fcc;
+
+  /* report statuses */
+  --status-ok: #237a46;
+  --status-low: #e07b16;
+  --status-out: #d63a28;
+  --status-soon: #2f6fcc;
+  --status-none: #737b8f;
+  --on-status: #ffffff;
+  --on-status-low: #1b2a4a;
+
+  /* secondary "type" palette (categories, always with a text label) */
+  --type-feu: #e8794a;
+  --type-eau: #4c8fc4;
+  --type-plante: #5e9e6b;
+  --type-electrik: #e8b730;
+  --type-psy: #a774b8;
+  --type-roche: #a08a6a;
+
+  /* overlays & layout */
+  --overlay: rgb(27 42 74 / 0.45);
+  --space-tabbar: 88px; /* tab bar height + gap, keeps toasts clear of it */
+
+  /* motion */
+  --dur-tap: 90ms;
+  --dur-fast: 160ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+  --dur-celebrate: 700ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: #0f1830;
+    --paper-2: #16213f;
+    --card: #1c2a4e;
+    --ink: #f3ead6;
+    --ink-2: #aeb6cb;
+    --shadow-solid: #070c1c;
+    --red: #ff5a45;
+    --on-red: #0f1830;
+    --red-glow: #8e1f12;
+    --yellow: #ffd25a;
+    --on-yellow: #1b2a4a;
+    --focus: #ffd25a;
+    --status-ok: #4cc57e;
+    --status-low: #ffa24a;
+    --status-out: #ff5a45;
+    --status-soon: #6fa8ff;
+    --status-none: #6f7893;
+    --on-status: #0f1830;
+    --on-status-low: #0f1830;
+    --type-feu: #f09a72;
+    --type-eau: #78add6;
+    --type-plante: #85b990;
+    --type-electrik: #f0cb63;
+    --type-psy: #c098cd;
+    --type-roche: #baa88d;
+    --overlay: rgb(7 12 28 / 0.6);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #0f1830;
+  --paper-2: #16213f;
+  --card: #1c2a4e;
+  --ink: #f3ead6;
+  --ink-2: #aeb6cb;
+  --shadow-solid: #070c1c;
+  --red: #ff5a45;
+  --on-red: #0f1830;
+  --red-glow: #8e1f12;
+  --yellow: #ffd25a;
+  --on-yellow: #1b2a4a;
+  --focus: #ffd25a;
+  --status-ok: #4cc57e;
+  --status-low: #ffa24a;
+  --status-out: #ff5a45;
+  --status-soon: #6fa8ff;
+  --status-none: #6f7893;
+  --on-status: #0f1830;
+  --on-status-low: #0f1830;
+  --type-feu: #f09a72;
+  --type-eau: #78add6;
+  --type-plante: #85b990;
+  --type-electrik: #f0cb63;
+  --type-psy: #c098cd;
+  --type-roche: #baa88d;
+  --overlay: rgb(7 12 28 / 0.6);
+}
+
+/* Reset Tailwind's default scales so only project tokens exist. */
+@theme {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --text-*: initial;
+  --font-*: initial;
+
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* radius scale (front-end spec): 6 / 10 / 16 / 18 (buttons) / 24 / 32 / pill */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-button: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  /* type scale */
+  --text-display: 34px;
+  --text-display--line-height: 1.05;
+  --text-h1: 28px;
+  --text-h1--line-height: 1.1;
+  --text-h2: 22px;
+  --text-h2--line-height: 1.15;
+  --text-h3: 19px;
+  --text-h3--line-height: 1.2;
+  --text-button: 17px;
+  --text-button--line-height: 1;
+  --text-band: 15px;
+  --text-band--line-height: 1;
+  --text-body: 16px;
+  --text-body--line-height: 1.55;
+  --text-small: 14px;
+  --text-small--line-height: 1.45;
+  --text-caption: 13px;
+  --text-caption--line-height: 1.4;
+  --text-label: 12px;
+  --text-label--line-height: 1;
+
+  /* easing */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-red: var(--red);
+  --color-on-red: var(--on-red);
+  --color-yellow: var(--yellow);
+  --color-on-yellow: var(--on-yellow);
+  --color-focus: var(--focus);
+  --color-overlay: var(--overlay);
+  --color-solid: var(--shadow-solid);
+  --color-status-ok: var(--status-ok);
+  --color-status-low: var(--status-low);
+  --color-status-out: var(--status-out);
+  --color-status-soon: var(--status-soon);
+  --color-status-none: var(--status-none);
+  --color-on-status: var(--on-status);
+  --color-on-status-low: var(--on-status-low);
+  --color-type-feu: var(--type-feu);
+  --color-type-eau: var(--type-eau);
+  --color-type-plante: var(--type-plante);
+  --color-type-electrik: var(--type-electrik);
+  --color-type-psy: var(--type-psy);
+  --color-type-roche: var(--type-roche);
+
+  --font-display: 'Fredoka Variable', ui-rounded, 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --font-body: 'Figtree Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* shadows are always colored (solid ink), never grey blur */
+  --shadow-press: 0 5px 0 var(--shadow-solid);
+  --shadow-pressed: 0 1px 0 var(--shadow-solid);
+  --shadow-card: 0 7px 0 var(--shadow-solid);
+  --shadow-chip: 0 3px 0 var(--shadow-solid);
+  --shadow-primary: 0 5px 0 var(--shadow-solid), 0 10px 18px -6px var(--red-glow);
+  --shadow-sheet: 0 -8px 30px -12px var(--shadow-solid);
+}

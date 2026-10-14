@@ -1,3 +1,5 @@
 @import 'tailwindcss';
-
-/* Design tokens arrive in story 1.2 (src/design/tokens.css). */
+@import '@fontsource-variable/fredoka/wdth.css';
+@import '@fontsource-variable/figtree';
+@import './design/tokens.css';
+@import './design/base.css';

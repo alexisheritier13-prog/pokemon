@@ -1,0 +1,167 @@
+/* Global base styles, typography utilities, holo effect and reduced-motion handling. */
+
+@layer base {
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+/* Typography roles (front-end spec, "Type Scale"). Fredoka is only used wide (wdth 108-118). */
+@utility type-display {
+  font-family: var(--font-display);
+  font-stretch: 115%;
+  font-weight: 600;
+  font-size: var(--text-display);
+  line-height: var(--text-display--line-height);
+}
+@utility type-h1 {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 600;
+  font-size: var(--text-h1);
+  line-height: var(--text-h1--line-height);
+}
+@utility type-h2 {
+  font-family: var(--font-display);
+  font-stretch: 110%;
+  font-weight: 600;
+  font-size: var(--text-h2);
+  line-height: var(--text-h2--line-height);
+}
+@utility type-h3 {
+  font-family: var(--font-display);
+  font-stretch: 108%;
+  font-weight: 600;
+  font-size: var(--text-h3);
+  line-height: var(--text-h3--line-height);
+}
+@utility type-band {
+  font-family: var(--font-display);
+  font-stretch: 118%;
+  font-weight: 600;
+  font-size: var(--text-band);
+  line-height: var(--text-band--line-height);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+@utility type-button {
+  font-family: var(--font-display);
+  font-stretch: 108%;
+  font-weight: 600;
+  font-size: var(--text-button);
+  line-height: var(--text-button--line-height);
+}
+@utility type-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Holo: original implementation. Pointer position drives --mx/--my; idle drift otherwise. */
+@utility holo {
+  position: relative;
+  isolation: isolate;
+  --mx: 50%;
+  --my: 50%;
+  --ang: 115deg;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 2;
+    background:
+      radial-gradient(circle at var(--mx) var(--my), rgb(255 255 255 / 0.55), transparent 42%),
+      repeating-linear-gradient(
+        var(--ang),
+        rgb(255 107 107 / 0.2) 0 6%,
+        rgb(255 217 61 / 0.2) 6% 12%,
+        rgb(107 255 184 / 0.2) 12% 18%,
+        rgb(107 197 255 / 0.2) 18% 24%,
+        rgb(197 107 255 / 0.2) 24% 30%
+      );
+    background-size:
+      100% 100%,
+      240% 240%;
+    background-position:
+      center,
+      var(--mx) var(--my);
+    mix-blend-mode: overlay;
+    opacity: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .holo[data-idle='true']::after {
+    animation: holo-drift 7s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes holo-drift {
+  from {
+    background-position:
+      center,
+      20% 30%;
+  }
+  to {
+    background-position:
+      center,
+      80% 70%;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .holo::after {
+    opacity: 0.5;
+  }
+}
