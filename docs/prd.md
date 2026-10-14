@@ -2,7 +2,7 @@
 
 > Agent : PM (John) — BMAD v4.33 — mode YOLO, v0.1 du 2026-10-14
 > Entrées : [`docs/brief.md`](brief.md) (v0.2, décisions du porteur incluses) et [`docs/input/initial-prompt.md`](input/initial-prompt.md) (référence détaillée, notamment pour la direction artistique).
-> Les éléments marqués **[PROPOSITION]** sont des choix du PM à valider par le porteur.
+> Les éléments marqués **[VALIDÉ]** sont des choix du PM à valider par le porteur.
 
 ## Goals and Background Context
 
@@ -24,6 +24,7 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 | Date | Version | Description | Author |
 |---|---|---|---|
 | 2026-10-14 | 0.1 | Première version issue du brief v0.2 | PM (John) |
+| 2026-10-14 | 0.2 | Propositions validées en bloc par le porteur | PM (John) |
 
 ## Requirements
 
@@ -39,7 +40,7 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 - **FR5 :** Les magasins des départements 84 et 13 sont importés depuis l'API Overpass d'OSM (grandes surfaces, jouets, culture, jeux vidéo, boutiques de jeux), dédoublonnés par `osm_id`. L'import est **ré-exécutable sans créer de doublons**.
 - **FR6 :** La carte (MapLibre, tuiles OSM gratuites) affiche les magasins autour de l'utilisateur, regroupés en clusters. Chaque marqueur porte la couleur du statut du **dernier signalement encore valide** : vert = en stock, orange = stock faible, rouge = épuisé confirmé, gris = rien de récent. Le statut « restock annoncé » a son propre marqueur. Un bouton « autour de moi » recentre la carte.
 - **FR7 :** Une **liste alternative** à la carte, accessible au clavier et aux lecteurs d'écran, présente les mêmes magasins triés par distance, avec leur statut.
-- **FR8 :** La fiche magasin affiche nom, enseigne, adresse, horaires, un **lien d'itinéraire** vers l'app de navigation native, un bouton favori, l'**historique** des signalements et une **heatmap jour × heure** des restocks constatés. La heatmap n'apparaît qu'au-delà d'un seuil de données **[PROPOSITION : ≥ 8 signalements « en stock » ou « stock faible » sur 90 jours]**.
+- **FR8 :** La fiche magasin affiche nom, enseigne, adresse, horaires, un **lien d'itinéraire** vers l'app de navigation native, un bouton favori, l'**historique** des signalements et une **heatmap jour × heure** des restocks constatés. La heatmap n'apparaît qu'au-delà d'un seuil de données **[VALIDÉ : ≥ 8 signalements « en stock » ou « stock faible » sur 90 jours]**.
 - **FR9 :** Un utilisateur connecté peut **proposer un magasin manquant** (nom, enseigne, adresse, position sur la carte). Le magasin reste invisible des autres utilisateurs jusqu'à sa validation par un admin.
 
 **Signalements**
@@ -58,26 +59,26 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 
 **Votes**
 - **FR20 :** Un utilisateur connecté vote « Confirmé », « Faux » ou « Plus rien » sur un signalement encore valide qui n'est pas le sien. Il a **un seul vote par signalement**, modifiable.
-- **FR21 :** **Tout vote exige d'être à ≤ 300 m du magasin**, vérifié par le serveur. **[PROPOSITION : l'exception « haute réputation » ne s'applique pas aux votes.]**
-- **FR22 :** « Plus rien » passe le signalement en **épuisé** et coupe toute nouvelle notification le concernant. **[PROPOSITION : un seul vote suffit si le votant est au moins « Fiable », sinon il en faut deux de votants distincts.]**
+- **FR21 :** **Tout vote exige d'être à ≤ 300 m du magasin**, vérifié par le serveur. **[VALIDÉ : l'exception « haute réputation » ne s'applique pas aux votes.]**
+- **FR22 :** « Plus rien » passe le signalement en **épuisé** et coupe toute nouvelle notification le concernant. **[VALIDÉ : un seul vote suffit si le votant est au moins « Fiable », sinon il en faut deux de votants distincts.]**
 - **FR23 :** Un signalement dont les « Faux » dépassent les « Confirmé » (avec au moins 2 « Faux ») est marqué **« contesté »**. Il est désaccentué dans le fil et ne déclenche plus de notification.
 
 **Réputation**
-- **FR24 :** Chaque profil a un `reputation_score` calculé exclusivement côté serveur. **[PROPOSITION de barème, paramétrable en base]** :
+- **FR24 :** Chaque profil a un `reputation_score` calculé exclusivement côté serveur. **[VALIDÉ — barème paramétrable en base]** :
   - +3 la première fois qu'un signalement de l'auteur est confirmé, puis +1 par confirmation supplémentaire, plafonné à +6 par signalement ;
   - +1 pour un signalement avec photo, non contesté à son expiration ;
   - +1 pour un vote cohérent avec l'issue finale du signalement ;
   - −4 pour un signalement contesté ;
   - −10 pour un signalement ou une photo retiré par la modération ;
   - le score ne descend pas sous 0.
-- **FR25 :** Badges affichés sur le profil et les cartes. **[PROPOSITION]** :
+- **FR25 :** Badges affichés sur le profil et les cartes. **[VALIDÉ]** :
   - **Nouveau** : moins de 10 pts ;
   - **Fiable** : ≥ 30 pts et au moins 80 % de signalements non contestés ;
   - **Éclaireur** : ≥ 10 signalements confirmés comme premier du jour dans un magasin ;
   - **Vétéran** : ≥ 150 pts.
 
   Le seuil « signalement à distance » est fixé à ≥ 150 pts et au moins 90 % de signalements non contestés.
-- **FR26 :** Chaque signalement a un `trust_score` (0 à 100) qui combine la réputation de l'auteur, la présence d'une photo, les votes et la fraîcheur. Il pilote le badge de fiabilité (« rareté ») de la carte. L'**effet holo** est réservé aux signalements au-dessus d'un seuil élevé **[PROPOSITION : ≥ 80]** et aux badges de réputation.
+- **FR26 :** Chaque signalement a un `trust_score` (0 à 100) qui combine la réputation de l'auteur, la présence d'une photo, les votes et la fraîcheur. Il pilote le badge de fiabilité (« rareté ») de la carte. L'**effet holo** est réservé aux signalements au-dessus d'un seuil élevé **[VALIDÉ : ≥ 80]** et aux badges de réputation.
 
 **Notifications push**
 - **FR27 :** L'utilisateur active les notifications Web Push (VAPID). Sur **iOS dans Safari non installé**, l'app affiche d'abord un **écran guidé d'installation** (Partager → Sur l'écran d'accueil) et ne demande la permission qu'une fois l'app installée. La permission n'est jamais demandée sans action explicite de l'utilisateur.
@@ -95,7 +96,7 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 - **FR33 :** Un bouton « Envoyer une notification de test » est disponible dans le compte.
 
 **Compte et RGPD**
-- **FR34 :** Le compte permet de gérer le pseudo, l'avatar (choisi parmi des avatars maison, sans upload en V1 **[PROPOSITION]**), les préférences d'alerte, les magasins favoris, et de voir l'historique de ses signalements, son score et ses badges.
+- **FR34 :** Le compte permet de gérer le pseudo, l'avatar (choisi parmi des avatars maison, sans upload en V1 **[VALIDÉ]**), les préférences d'alerte, les magasins favoris, et de voir l'historique de ses signalements, son score et ses badges.
 - **FR35 :** **Export** en self-service de toutes ses données au format JSON.
 - **FR36 :** **Suppression** du compte en self-service : profil, préférences, abonnements push, votes et photos sont supprimés. Les signalements passés sont anonymisés (auteur retiré) pour préserver l'historique des magasins.
 - **FR37 :** Les pages légales sont accessibles depuis le footer et le compte : mentions légales, politique de confidentialité, CGU. La **mention de non-affiliation** à Nintendo, The Pokémon Company et Creatures figure dans le footer et les CGU.
@@ -110,7 +111,7 @@ RestockRadar est une PWA communautaire : on voit ce qui est en rayon autour de s
 
 **Hors ligne**
 - **FR40 :** La coquille de l'app et les derniers signalements consultés restent disponibles hors ligne, avec un indicateur visible.
-- **FR41 :** Un signalement créé hors ligne est mis en **file d'attente** avec la position et l'heure capturées à sa création, puis envoyé au retour du réseau (Background Sync, ou bouton « Envoyer maintenant » sur iOS et Firefox). **[PROPOSITION : le serveur accepte la distance capturée si le délai entre capture et envoi est ≤ 2 h. Au-delà, le signalement est refusé et l'utilisateur prévenu.]**
+- **FR41 :** Un signalement créé hors ligne est mis en **file d'attente** avec la position et l'heure capturées à sa création, puis envoyé au retour du réseau (Background Sync, ou bouton « Envoyer maintenant » sur iOS et Firefox). **[VALIDÉ : le serveur accepte la distance capturée si le délai entre capture et envoi est ≤ 2 h. Au-delà, le signalement est refusé et l'utilisateur prévenu.]**
 
 ### Non Functional
 - **NFR1 :** **PWA installable** sur iOS 16.4+ et Android : manifest complet, service worker, icônes de toutes tailles, splash screens iOS. L'installabilité est vérifiée par une check-list (Lighthouse n'a plus de catégorie PWA).
@@ -209,7 +210,7 @@ Chaque epic ajoute ses tests au fil de l'eau. L'epic 6 ne fait que consolider.
   - Zod, ESLint, Prettier, Vitest, Playwright.
 - **À trancher à l'étape Architecture** : version de Tailwind (v3 ou v4) et hébergeur front (Vercel ou Netlify).
 - **Spike obligatoire en phase 1** : `web-push` dans une Edge Function Deno. En cas d'échec, retour vers le porteur avant tout changement de librairie.
-- **Géocodage de repli** (ville ou code postal) : **API Adresse de l'État (BAN, `api-adresse.data.gouv.fr`)**, gratuite et sans clé. **[PROPOSITION]**
+- **Géocodage de repli** (ville ou code postal) : **API Adresse de l'État (BAN, `api-adresse.data.gouv.fr`)**, gratuite et sans clé. **[VALIDÉ]**
 - **Horaires** : format `opening_hours` d'OSM, parsé côté client, et modifiable par l'admin.
 - **Catalogue** : tables `games` et `products` (la notion de jeu existe dès la V1 pour préparer One Piece, Lorcana et Magic). Seed initial d'une trentaine de produits Pokémon génériques, sans visuel.
 - **Schéma prêt pour la V2** : la table de statistiques par magasin (agrégats jour × heure) est alimentée dès la V1 par le job `pg_cron`. Elle sert la heatmap et servira la prédiction.
@@ -686,14 +687,14 @@ Revue PM effectuée sur la base de la check-list `pm-checklist` (passe rapide, �
 | 1. Problème et contexte | PASS | Issu du brief. Objectifs chiffrés encore à valider par le porteur. |
 | 2. Périmètre MVP | PASS | V1 et V2 bornées, hors-périmètre explicite. |
 | 3. Expérience utilisateur | PARTIAL | Les parcours seront détaillés dans la front-end spec. Direction visuelle attendue en phase 0. |
-| 4. Exigences fonctionnelles | PARTIAL | 9 points marqués [PROPOSITION] à valider (FR8, 21, 22, 24, 25, 26, 34, 41, géocodage). |
+| 4. Exigences fonctionnelles | PARTIAL | 9 points marqués [VALIDÉ] à valider (FR8, 21, 22, 24, 25, 26, 34, 41, géocodage). |
 | 5. Exigences non fonctionnelles | PASS | Lighthouse PWA remplacé par une check-list (décision du porteur). |
 | 6. Epics et stories | PASS | Epic 1 fondatrice et livrable, stories séquentielles, transverses intégrés dès l'epic 1. |
 | 7. Guidance technique | PASS | Stack imposée, deux choix renvoyés à l'architecte, spike `web-push` planifié. |
 | 8. Transverse (données, intégrations, ops) | PASS | OSM, BAN, Web Push, `pg_cron`, sauvegardes en 6.4. |
 | 9. Clarté | PASS | — |
 
-**Points bloquants avant l'architecture :** aucun. Les [PROPOSITION] peuvent être validées en parallèle, car elles touchent des paramètres et non la structure.
+**Points bloquants avant l'architecture :** aucun. Les [VALIDÉ] peuvent être validées en parallèle, car elles touchent des paramètres et non la structure.
 
 ## Next Steps
 

@@ -1,0 +1,569 @@
+<title>RestockRadar Phase 0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=Figtree:wght@400;500;700&family=Fredoka:wdth,wght@75..125,400..700&family=Instrument+Sans:wght@400;500;600;700&family=Lilita+One&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap">
+<style>
+/* Layout: a quiet working document (brief, then moodboard, then three full-width "style tiles", each painted in its own world), single column, 880px max. */
+:root{
+  /* page chrome */
+  --pg-bg:#F7F5F0; --pg-surface:#FFFFFF; --pg-fg:#1E2433; --pg-muted:#5E6577; --pg-line:#E3DFD5; --pg-accent:#C9412E;
+  --f-chrome:"Instrument Sans",system-ui,sans-serif;
+
+  /* ── Direction A · Classeur ── */
+  --a-bg:#F6EFDF; --a-bg2:#EDE2C8; --a-card:#FFFBF2; --a-ink:#1B2A4A; --a-ink2:#4A5876;
+  --a-red:#D63A28; --a-red-d:#9C2516; --a-yel:#FFC93C; --a-yel-d:#C98F00;
+  --a-ok:#2E8F55; --a-low:#E07B16; --a-out:#D63A28; --a-none:#8E95A6; --a-soon:#2F6FCC; --a-on:#FFFFFF;
+  --f-a-disp:"Fredoka","Nunito",ui-rounded,system-ui,sans-serif; --f-a-body:"Figtree",system-ui,sans-serif;
+
+  /* ── Direction B · Expédition ── */
+  --b-bg:#F2F4EE; --b-bg2:#E2E8DC; --b-card:#FFFFFF; --b-ink:#14223C; --b-ink2:#4C5A6E;
+  --b-fire:#EE5230; --b-fire-d:#B23415; --b-volt:#FFD23F; --b-water:#1F8FAD; --b-grass:#3A9B57; --b-psy:#A55CB8;
+  --b-ok:#3A9B57; --b-low:#E8891C; --b-out:#E0452A; --b-none:#8D96A3; --b-soon:#1F8FAD; --b-on:#FFFFFF;
+  --f-b-disp:"Lilita One","Arial Rounded MT Bold",system-ui,sans-serif; --f-b-body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,sans-serif;
+
+  /* ── Direction C · Radar de nuit (dark-first; "day" values here so light mode still works) ── */
+  --c-bg:#EEF0F5; --c-bg2:#E1E5EE; --c-card:#FFFFFF; --c-screen:#E3F4EE; --c-ink:#141B30; --c-ink2:#55607A;
+  --c-red:#E2483B; --c-red-d:#A52B20; --c-lamp:#F2B705; --c-radar:#14A37A; --c-glow:rgba(20,163,122,.25);
+  --c-ok:#14A37A; --c-low:#E28A12; --c-out:#E2483B; --c-none:#8A93A8; --c-soon:#4D7CF0; --c-on:#FFFFFF;
+  --f-c-disp:"M PLUS Rounded 1c",ui-rounded,system-ui,sans-serif; --f-c-body:"Instrument Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --pg-bg:#12151D; --pg-surface:#1A1E29; --pg-fg:#E9EBF1; --pg-muted:#A1A8B9; --pg-line:#2B3140; --pg-accent:#FF6A55;
+  --a-bg:#0F1830; --a-bg2:#16213F; --a-card:#1C2A4E; --a-ink:#F3EAD6; --a-ink2:#AEB6CB; --a-red:#FF5A45; --a-red-d:#8E1F12; --a-yel:#FFD25A; --a-yel-d:#A87800;
+  --a-ok:#4CC57E; --a-low:#FFA24A; --a-out:#FF5A45; --a-none:#6F7893; --a-soon:#6FA8FF; --a-on:#0F1830;
+  --b-bg:#0B1F24; --b-bg2:#11303A; --b-card:#143640; --b-ink:#EAF4EF; --b-ink2:#A3BDBA; --b-fire:#FF6B47; --b-fire-d:#A3301A; --b-volt:#FFDA5C; --b-water:#45B8D4; --b-grass:#5BC27A; --b-psy:#C784D8;
+  --b-ok:#5BC27A; --b-low:#FFA640; --b-out:#FF6B47; --b-none:#6E8790; --b-soon:#45B8D4; --b-on:#0B1F24;
+  --c-bg:#0E1426; --c-bg2:#141C33; --c-card:#18213B; --c-screen:#0B2B2A; --c-ink:#E9EEF8; --c-ink2:#9AA6C4; --c-red:#FF5B4D; --c-red-d:#9B2419; --c-lamp:#FFCF4A; --c-radar:#5BE3B0; --c-glow:rgba(91,227,176,.35);
+  --c-ok:#5BE3B0; --c-low:#FFB547; --c-out:#FF5B4D; --c-none:#6B7591; --c-soon:#7FA2FF; --c-on:#0E1426;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --pg-bg:#12151D; --pg-surface:#1A1E29; --pg-fg:#E9EBF1; --pg-muted:#A1A8B9; --pg-line:#2B3140; --pg-accent:#FF6A55;
+  --a-bg:#0F1830; --a-bg2:#16213F; --a-card:#1C2A4E; --a-ink:#F3EAD6; --a-ink2:#AEB6CB; --a-red:#FF5A45; --a-red-d:#8E1F12; --a-yel:#FFD25A; --a-yel-d:#A87800;
+  --a-ok:#4CC57E; --a-low:#FFA24A; --a-out:#FF5A45; --a-none:#6F7893; --a-soon:#6FA8FF; --a-on:#0F1830;
+  --b-bg:#0B1F24; --b-bg2:#11303A; --b-card:#143640; --b-ink:#EAF4EF; --b-ink2:#A3BDBA; --b-fire:#FF6B47; --b-fire-d:#A3301A; --b-volt:#FFDA5C; --b-water:#45B8D4; --b-grass:#5BC27A; --b-psy:#C784D8;
+  --b-ok:#5BC27A; --b-low:#FFA640; --b-out:#FF6B47; --b-none:#6E8790; --b-soon:#45B8D4; --b-on:#0B1F24;
+  --c-bg:#0E1426; --c-bg2:#141C33; --c-card:#18213B; --c-screen:#0B2B2A; --c-ink:#E9EEF8; --c-ink2:#9AA6C4; --c-red:#FF5B4D; --c-red-d:#9B2419; --c-lamp:#FFCF4A; --c-radar:#5BE3B0; --c-glow:rgba(91,227,176,.35);
+  --c-ok:#5BE3B0; --c-low:#FFB547; --c-out:#FF5B4D; --c-none:#6B7591; --c-soon:#7FA2FF; --c-on:#0E1426;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--pg-bg);color:var(--pg-fg);font:16px/1.6 var(--f-chrome);padding-inline:16px;padding-block:24px 64px}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--pg-accent);outline-offset:3px;border-radius:6px}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.15}
+p{margin:0}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--pg-muted)}
+.muted{color:var(--pg-muted)}
+.lead{font-size:18px;max-width:62ch}
+svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* header */
+.top{display:flex;flex-direction:column;gap:16px}
+.top h1{font-size:clamp(30px,6vw,44px);font-weight:700;letter-spacing:-.02em}
+.themebar{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--pg-line);border-radius:999px;background:var(--pg-surface);align-self:flex-start}
+.themebar button{font:600 14px var(--f-chrome);color:var(--pg-muted);background:none;border:0;border-radius:999px;padding:8px 14px;min-height:40px;cursor:pointer}
+.themebar button[aria-pressed="true"]{background:var(--pg-fg);color:var(--pg-bg)}
+
+/* moodboard */
+section.block{display:flex;flex-direction:column;gap:20px}
+section.block>h2{font-size:26px;letter-spacing:-.01em}
+.mood{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.note{background:var(--pg-surface);border:1px solid var(--pg-line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.note h3{font-size:16px}
+.note p{font-size:14.5px;color:var(--pg-muted)}
+.note .src{font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:auto}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.rules ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.rules h3{font-size:15px;margin-bottom:8px}
+
+/* tile frame (common) */
+.tile{border-radius:28px;padding:24px 20px;display:flex;flex-direction:column;gap:24px;overflow:hidden}
+.tile-head{display:flex;flex-direction:column;gap:8px}
+.tile-head .tag{font:600 12px/1 var(--f-chrome);letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.tile-head p{max-width:60ch;font-size:15.5px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:16px;min-width:0}
+.lbl{font:600 11.5px/1 var(--f-chrome);letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sw{border-radius:12px;padding:10px;min-height:68px;display:flex;flex-direction:column;justify-content:flex-end;font:500 11.5px/1.3 var(--f-chrome)}
+.sw b{font-weight:700;font-size:12.5px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.status-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font:500 12.5px var(--f-chrome)}
+
+/* ═══════════ A · CLASSEUR ═══════════ */
+.ta{background:var(--a-bg);color:var(--a-ink);font-family:var(--f-a-body);border:3px solid var(--a-ink)}
+.ta h2{font:600 34px/1.05 var(--f-a-disp);font-variation-settings:"wdth" 112;letter-spacing:-.01em}
+.ta .spec-d{font:600 30px/1.05 var(--f-a-disp);font-variation-settings:"wdth" 115}
+.ta .spec-b{font-size:15.5px;color:var(--a-ink2)}
+.a-btn{font:600 17px/1 var(--f-a-disp);font-variation-settings:"wdth" 108;border:3px solid var(--a-ink);border-radius:18px;padding:0 22px;min-height:52px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;transition:transform 90ms ease,box-shadow 90ms ease}
+.a-btn.primary{background:var(--a-red);color:#fff;box-shadow:0 5px 0 var(--a-ink),0 10px 18px -6px color-mix(in srgb,var(--a-red) 55%,transparent)}
+.a-btn.second{background:var(--a-card);color:var(--a-ink);box-shadow:0 5px 0 var(--a-ink)}
+.a-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--a-ink)}
+.a-chip{font:600 14px/1 var(--f-a-body);border:2px solid var(--a-ink);border-radius:999px;padding:0 14px;min-height:44px;display:inline-flex;align-items:center;gap:6px;background:var(--a-card);color:var(--a-ink)}
+.a-chip[aria-pressed="true"]{background:var(--a-yel);color:#1B2A4A;border-color:var(--a-ink)}
+/* report card */
+.a-card{position:relative;background:var(--a-card);border:3px solid var(--a-ink);border-radius:24px;padding:10px;box-shadow:0 7px 0 var(--a-ink);max-width:340px;isolation:isolate}
+.a-band{display:flex;align-items:center;justify-content:space-between;background:var(--a-ok);color:#fff;border-radius:14px;padding:8px 12px;font:600 15px/1 var(--f-a-disp);font-variation-settings:"wdth" 118;letter-spacing:.02em}
+.a-band .rar{display:flex;gap:2px;color:var(--a-yel)}
+.a-art{margin-top:8px;border:2px solid var(--a-ink);border-radius:16px;height:150px;overflow:hidden;position:relative;background:linear-gradient(var(--a-bg2) 0 0)}
+.a-meta{padding:10px 4px 2px;display:flex;flex-direction:column;gap:6px}
+.a-meta h3{font:600 20px/1.1 var(--f-a-disp);font-variation-settings:"wdth" 108}
+.a-sub{font-size:13.5px;color:var(--a-ink2);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+.a-prod{display:flex;flex-wrap:wrap;gap:6px}
+.a-prod span{font:600 12.5px/1 var(--f-a-body);border-radius:8px;padding:6px 8px;background:var(--a-bg2);color:var(--a-ink)}
+.a-foot{display:flex;justify-content:space-between;align-items:center;border-top:2px dashed color-mix(in srgb,var(--a-ink) 30%,transparent);margin-top:6px;padding-top:8px;font-size:13px}
+.a-votes{display:flex;gap:6px}
+.a-votes button{font:600 13px/1 var(--f-a-body);border:2px solid var(--a-ink);background:var(--a-card);color:var(--a-ink);border-radius:12px;min-height:44px;padding:0 10px;display:inline-flex;gap:5px;align-items:center;box-shadow:0 3px 0 var(--a-ink);cursor:pointer}
+.a-votes button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--a-ink)}
+/* markers: price-tag pins */
+.a-mk{position:relative;width:44px;height:44px;border-radius:14px;border:3px solid var(--a-ink);display:grid;place-items:center;color:var(--a-on);font-size:20px;box-shadow:0 3px 0 var(--a-ink)}
+.a-mk::after{content:"";position:absolute;bottom:-11px;left:50%;width:12px;height:12px;background:inherit;border-right:3px solid var(--a-ink);border-bottom:3px solid var(--a-ink);transform:translateX(-50%) rotate(45deg);border-bottom-right-radius:4px}
+.a-mk.cl{border-radius:999px;background:var(--a-yel);color:#1B2A4A;font:700 17px/1 var(--f-a-disp)}
+.a-mk.cl::after{display:none}
+.mk-cap{display:flex;flex-direction:column;align-items:center;gap:16px;font:500 12px var(--f-chrome)}
+/* badges: enamel pins */
+.badge-cap{display:flex;flex-direction:column;align-items:center;gap:6px;font:600 13px var(--f-chrome);text-align:center;width:88px}
+.badge-cap small{font-weight:500;opacity:.7;font-size:11.5px}
+
+/* ═══════════ B · EXPÉDITION ═══════════ */
+.tb{background:var(--b-bg);color:var(--b-ink);font-family:var(--f-b-body);position:relative}
+.tb::before{content:"";position:absolute;inset:0 0 auto 0;height:10px;background:linear-gradient(90deg,var(--b-fire) 0 25%,var(--b-volt) 25% 50%,var(--b-water) 50% 75%,var(--b-grass) 75%)}
+.tb h2{font:400 38px/1 var(--f-b-disp);letter-spacing:.005em}
+.tb .spec-d{font:400 34px/1 var(--f-b-disp)}
+.tb .spec-b{font-size:15.5px;color:var(--b-ink2)}
+.b-btn{font:400 19px/1 var(--f-b-disp);letter-spacing:.02em;border:0;border-radius:16px;padding:0 24px;min-height:54px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;transform:skewX(-6deg);transition:transform 90ms ease,box-shadow 90ms ease}
+.b-btn>span{display:inline-flex;align-items:center;gap:10px;transform:skewX(6deg)}
+.b-btn.primary{background:var(--b-fire);color:#fff;box-shadow:5px 5px 0 var(--b-fire-d)}
+.b-btn.second{background:var(--b-volt);color:#14223C;box-shadow:5px 5px 0 color-mix(in srgb,var(--b-volt) 50%,#7a5a00)}
+.b-btn:active{transform:skewX(-6deg) translate(4px,4px);box-shadow:1px 1px 0 var(--b-fire-d)}
+.b-chip{font:700 14px/1 var(--f-b-body);border-radius:999px;padding:0 14px;min-height:44px;display:inline-flex;align-items:center;gap:6px;background:var(--b-card);color:var(--b-ink);border:2px solid color-mix(in srgb,var(--b-ink) 18%,transparent)}
+.b-chip[aria-pressed="true"]{background:var(--b-water);color:#fff;border-color:transparent}
+.b-card{position:relative;background:var(--b-card);border-radius:22px;overflow:hidden;box-shadow:6px 6px 0 var(--b-water);max-width:340px;isolation:isolate}
+.b-band{background:var(--b-ok);color:#fff;padding:14px 16px 22px;clip-path:polygon(0 0,100% 0,100% 72%,0 100%);display:flex;justify-content:space-between;align-items:flex-start}
+.b-band strong{font:400 24px/1 var(--f-b-disp);letter-spacing:.02em}
+.b-band .rar{display:flex;gap:3px;color:var(--b-volt);font-size:18px}
+.b-body{padding:0 16px 14px;display:flex;flex-direction:column;gap:8px;margin-top:-6px}
+.b-body h3{font:400 22px/1.05 var(--f-b-disp)}
+.b-sub{font-size:13.5px;color:var(--b-ink2);display:flex;flex-wrap:wrap;gap:4px 12px}
+.b-art{height:120px;border-radius:14px;overflow:hidden;position:relative;background:var(--b-bg2)}
+.b-prod{display:flex;flex-wrap:wrap;gap:6px}
+.b-prod span{font:700 12.5px/1 var(--f-b-body);border-radius:999px;padding:6px 10px;color:#fff}
+.b-foot{display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:8px}
+.b-votes{display:flex;gap:6px}
+.b-votes button{font:700 13px/1 var(--f-b-body);border:0;border-radius:12px;min-height:44px;padding:0 10px;display:inline-flex;gap:5px;align-items:center;cursor:pointer;background:var(--b-bg2);color:var(--b-ink)}
+.b-mk{width:46px;height:46px;display:grid;place-items:center;color:var(--b-on);font-size:20px;border-radius:14px;transform:rotate(-8deg);box-shadow:3px 3px 0 color-mix(in srgb,var(--b-ink) 55%,transparent);border:3px solid var(--b-card)}
+.b-mk.cl{background:var(--b-ink);color:var(--b-bg);font:400 20px/1 var(--f-b-disp);border-radius:999px;transform:none}
+
+/* ═══════════ C · RADAR DE NUIT ═══════════ */
+.tc{background:var(--c-bg);color:var(--c-ink);font-family:var(--f-c-body);position:relative}
+.tc::before{content:"";position:absolute;right:-120px;top:-120px;width:320px;height:320px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--c-radar) 30%,transparent);box-shadow:0 0 0 40px color-mix(in srgb,var(--c-radar) 6%,transparent),0 0 0 41.5px color-mix(in srgb,var(--c-radar) 22%,transparent),0 0 0 90px color-mix(in srgb,var(--c-radar) 4%,transparent),0 0 0 91.5px color-mix(in srgb,var(--c-radar) 16%,transparent);pointer-events:none}
+.tc>*{position:relative}
+.tc h2{font:800 34px/1.05 var(--f-c-disp);letter-spacing:-.01em}
+.tc .spec-d{font:800 30px/1.1 var(--f-c-disp)}
+.tc .spec-b{font-size:15.5px;color:var(--c-ink2)}
+.c-btn{font:700 16px/1 var(--f-c-disp);border:0;border-radius:999px;padding:0 24px;min-height:52px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;transition:transform 90ms ease,box-shadow 90ms ease}
+.c-btn.primary{background:var(--c-red);color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.28),inset 0 -4px 0 var(--c-red-d),0 8px 20px -6px color-mix(in srgb,var(--c-red) 70%,transparent)}
+.c-btn.second{background:var(--c-card);color:var(--c-ink);box-shadow:inset 0 -4px 0 var(--c-bg2),0 0 0 2px var(--c-bg2)}
+.c-btn:active{transform:translateY(2px);box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
+.c-chip{font:600 14px/1 var(--f-c-body);border-radius:999px;padding:0 14px;min-height:44px;display:inline-flex;align-items:center;gap:8px;background:var(--c-card);color:var(--c-ink);box-shadow:0 0 0 1.5px var(--c-bg2)}
+.c-chip[aria-pressed="true"]{box-shadow:0 0 0 2px var(--c-radar);color:var(--c-ink)}
+.c-chip .led{width:8px;height:8px;border-radius:50%;background:var(--c-none)}
+.c-chip[aria-pressed="true"] .led{background:var(--c-radar);box-shadow:0 0 8px var(--c-radar)}
+.c-card{position:relative;background:var(--c-card);border-radius:26px;padding:12px;max-width:340px;box-shadow:0 0 0 1.5px var(--c-bg2),0 18px 40px -18px rgba(5,10,30,.45);isolation:isolate}
+.c-screen{background:var(--c-screen);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 2px 8px rgba(0,0,0,.18)}
+.c-top{display:flex;justify-content:space-between;align-items:center;font:700 13px/1 var(--f-c-disp);letter-spacing:.08em;text-transform:uppercase;color:var(--c-ok)}
+.c-top .st{display:flex;align-items:center;gap:8px}
+.c-led{width:12px;height:12px;border-radius:50%;background:var(--c-ok);box-shadow:0 0 0 4px var(--c-glow),0 0 14px var(--c-ok)}
+.c-top .rar{display:flex;gap:2px;color:var(--c-lamp)}
+.c-read{font:500 13px/1.3 ui-monospace,"SF Mono",Menlo,Consolas,monospace;color:var(--c-ink2);display:flex;gap:14px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.c-read b{color:var(--c-ink);font-weight:600}
+.c-art{height:110px;border-radius:12px;overflow:hidden;position:relative;background:var(--c-bg2)}
+.c-body{padding:12px 6px 4px;display:flex;flex-direction:column;gap:8px}
+.c-body h3{font:800 19px/1.15 var(--f-c-disp)}
+.c-prod{display:flex;flex-wrap:wrap;gap:6px}
+.c-prod span{font:600 12.5px/1 var(--f-c-body);border-radius:999px;padding:6px 10px;background:var(--c-bg2);color:var(--c-ink)}
+.c-foot{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--c-ink2);gap:8px}
+.c-votes{display:flex;gap:6px}
+.c-votes button{font:600 13px/1 var(--f-c-body);border:0;border-radius:999px;min-height:44px;padding:0 12px;display:inline-flex;gap:6px;align-items:center;cursor:pointer;background:var(--c-bg2);color:var(--c-ink)}
+.c-mk{position:relative;width:44px;height:44px;display:grid;place-items:center}
+.c-mk i{width:20px;height:20px;border-radius:50%;background:var(--mk);box-shadow:0 0 0 4px var(--c-card),0 0 0 6px var(--mk),0 0 16px var(--mk);display:grid;place-items:center;color:var(--c-on);font-size:12px;font-style:normal}
+.c-mk.ping::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--mk);animation:ping 2.2s ease-out infinite}
+@keyframes ping{from{transform:scale(.45);opacity:.9}to{transform:scale(1.25);opacity:0}}
+.c-mk.cl i{width:34px;height:34px;background:var(--c-card);color:var(--c-ink);font:800 15px/1 var(--f-c-disp);box-shadow:0 0 0 2px var(--c-radar),0 0 14px var(--c-glow)}
+
+/* shelf "photo" placeholder (no product visuals, only generic boxes) */
+.shelf{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-evenly;padding:10px}
+.shelf .r{display:flex;gap:5px;align-items:flex-end;border-bottom:4px solid rgba(0,0,0,.18);padding-bottom:2px}
+.shelf .r i{display:block;flex:1;border-radius:3px;height:34px;opacity:.9}
+.shelf .r i:nth-child(3n){height:28px}
+.shelf .r i:nth-child(4n){height:40px}
+.photo-tag{position:absolute;right:8px;bottom:8px;font:600 11px/1 var(--f-chrome);background:rgba(0,0,0,.55);color:#fff;border-radius:999px;padding:5px 8px;display:flex;gap:5px;align-items:center}
+
+/* holo (original implementation: pointer-driven CSS vars; idle drift; off under reduced motion) */
+.holo{--mx:50%;--my:50%;--ang:115deg}
+.holo::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
+  background:
+    radial-gradient(circle at var(--mx) var(--my),rgba(255,255,255,.55),transparent 42%),
+    repeating-linear-gradient(var(--ang),#ff6b6b33 0 6%,#ffd93d33 6% 12%,#6bffb833 12% 18%,#6bc5ff33 18% 24%,#c56bff33 24% 30%);
+  background-size:100% 100%,240% 240%;background-position:center,var(--mx) var(--my);mix-blend-mode:overlay;opacity:.85;transition:opacity .3s}
+@media (prefers-reduced-motion:no-preference){.holo.idle::after{animation:drift 7s ease-in-out infinite alternate}}
+@keyframes drift{from{background-position:center,20% 30%}to{background-position:center,80% 70%}}
+@media (prefers-reduced-motion:reduce){.c-mk.ping::before{animation:none;opacity:.5}.holo::after{opacity:.5}}
+
+/* compare */
+.cmp{overflow-x:auto;border:1px solid var(--pg-line);border-radius:14px;background:var(--pg-surface)}
+.cmp table{border-collapse:collapse;width:100%;min-width:640px;font-size:14.5px}
+.cmp th,.cmp td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--pg-line)}
+.cmp th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--pg-muted);font-weight:600}
+.cmp tr:last-child td{border-bottom:0}
+.reco{background:var(--pg-surface);border:1px solid var(--pg-line);border-left:0;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.reco h3{font-size:18px}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-low" viewBox="0 0 24 24"><path d="M6 18v-3M12 18v-7M18 18V6" opacity=".35"/><path d="M6 18v-3"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4.5l3 1.8"/></symbol>
+    <symbol id="i-dash" viewBox="0 0 24 24"><path d="M7 12h10"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+    <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8.5A1.5 1.5 0 015.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0120 8.5v9a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 17.5z"/><circle cx="12" cy="13" r="3.2"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-nav" viewBox="0 0 24 24"><path d="M4 11.5L20 4l-7.5 16-2-6.5z"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><path d="M16 6.2a3 3 0 010 5.6M17.5 14.6c1.6.6 2.7 2 3 4.4"/></symbol>
+    <symbol id="i-thumb" viewBox="0 0 24 24"><path d="M7 11v8H4.5v-8zM7 11l4-7c1.5 0 2.3 1 2 2.5L12.5 10H18a2 2 0 012 2.3l-1 5.4A2 2 0 0117 19H7"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M6 18c0-7 4.5-11.5 13-12-.4 8.5-5 13-12 13"/><path d="M6 18l6-6"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+<header class="top">
+  <span class="eyebrow">Phase 0 · Direction artistique · 14 octobre 2026</span>
+  <h1>Trois directions pour RestockRadar</h1>
+  <p class="lead">D'abord la veille et ce que j'en retiens, puis trois directions visuelles complètes : palette, paire de polices, boutons, carte de signalement, marqueurs de carte et badges. Bascule clair / sombre ci-dessous. Sur ordinateur, passe la souris sur les cartes « Holo » pour voir le reflet.</p>
+  <div class="themebar" role="group" aria-label="Thème d'affichage">
+    <button type="button" id="th-sys" data-t="" aria-pressed="true">Système</button>
+    <button type="button" id="th-light" data-t="light" aria-pressed="false">Clair</button>
+    <button type="button" id="th-dark" data-t="dark" aria-pressed="false">Sombre</button>
+  </div>
+</header>
+
+<section class="block" aria-labelledby="mb">
+  <span class="eyebrow">Veille</span>
+  <h2 id="mb">Moodboard commenté</h2>
+  <div class="mood">
+    <article class="note">
+      <h3>Pokémon TCG Pocket</h3>
+      <p>Le geste d'ouverture d'un booster est guidé par des traits, une contrainte physique et un retour positif immédiat. L'attente est montrée là où on regarde (un minuteur au centre). À retenir : <strong>un geste central très satisfaisant</strong> (pour nous, l'envoi d'un signalement) et l'info d'état montrée dans le contexte, jamais cachée.</p>
+      <div class="src"><a href="https://ixd.prattsi.org/2025/09/design-critique-pokemon-tcg-pocket-android-app/">Critique Pratt IxD</a><a href="https://thefilibusterblog.com/fans-express-confusion-over-pokemon-tcg-pocket-ui-after-new-expansion-launch/">Confusion sur les boosters</a></div>
+    </article>
+    <article class="note">
+      <h3>Écarlate / Violet et Légendes Z-A</h3>
+      <p>Les critiques saluent des menus Z-A « clairs, lisibles, agréables » (liste à gauche, état à droite), mais reprochent à Écarlate/Violet ses raccourcis incohérents. Le Pokédex d'É/V emprunte au rayonnage de livres. À retenir : <strong>panneaux nets et hiérarchie forte</strong>, actions toujours au même endroit, et l'idée du rayonnage pour nos produits.</p>
+      <div class="src"><a href="https://bulbapedia.bulbagarden.net/wiki/Menu">Bulbapedia, menus</a><a href="https://uxdesign.cc/how-design-affects-games-in-two-generations-of-pok%C3%A9mon-97cc5bed9a65">UX Collective, ÉB vs É/V</a><a href="https://www.nintendolife.com/guides/everything-new-in-the-latest-pokemon-scarlet-and-violet-trailer-october">Nintendo Life</a></div>
+    </article>
+    <article class="note">
+      <h3>Pokémon Sleep</h3>
+      <p>Les données (types de sommeil) deviennent une scène : on ne lit pas un graphique, on regarde un campement. Les boutons restent dans le quart bas, la scène prend le reste. À retenir : <strong>transformer nos chiffres en objets</strong> (la fiabilité devient une rareté, la heatmap un calendrier de chasse) et garder les actions au pouce.</p>
+      <div class="src"><a href="https://www.techradar.com/gaming/my-sleep-has-gotten-worse-since-playing-pokemon-sleep-but-i-still-wont-stop">TechRadar</a><a href="https://www.nintendolife.com/features/hands-on-pokemon-sleep-open-beta-an-absolute-snoozefest">Nintendo Life</a></div>
+    </article>
+    <article class="note">
+      <h3>Les cartes elles-mêmes</h3>
+      <p>Une carte a une anatomie stricte : cadre, bandeau, fenêtre d'illustration, texte, symbole de rareté. Le holo couvre l'illustration, le reverse le cadre. À retenir : notre carte de signalement reprend <strong>cette anatomie</strong> (bandeau de statut, fenêtre photo, rareté = fiabilité) avec <strong>nos propres symboles</strong> (étincelles, pas les ●◆★ officiels).</p>
+      <div class="src"><a href="https://cardgamer.com/guides/holo-vs-reverse-holo/">Holo vs reverse</a><a href="https://dotesports.com/pokemon/news/pokemon-tcg-card-rarity-explained">Raretés expliquées</a></div>
+    </article>
+    <article class="note">
+      <h3>Holo en CSS</h3>
+      <p>poke-holo superpose dégradés, modes de fusion et un reflet qui suit le pointeur. Le projet est sous GPL-3 et reproduit des cartes officielles : on l'étudie, on n'en reprend rien. Notre holo est écrit de zéro, plus sobre, et réservé aux signalements très fiables et aux badges.</p>
+      <div class="src"><a href="https://poke-holo.simey.me/">Démo poke-holo</a><a href="https://hellogithub.com/en/repository/simeydotme/pokemon-cards-css">Fiche du projet</a></div>
+    </article>
+    <article class="note">
+      <h3>Duolingo</h3>
+      <p>Des boutons « touches » : un bord inférieur plein de 3 à 4 px, dans une teinte plus sombre, qui s'écrase au tap. Bordures épaisses, jamais filaires. Une mascotte présente dans l'onboarding et les erreurs. À retenir : <strong>le relief pressable</strong> et <strong>les états vides habités</strong>.</p>
+      <div class="src"><a href="https://design.duolingo.com/">Duolingo Design</a><a href="https://www.webdesignhot.com/design.md/duolingo/">Analyse tierce</a></div>
+    </article>
+    <article class="note">
+      <h3>Partiful, Airbnb, Things, Headspace</h3>
+      <p>Partiful tire son caractère de la couleur et du ton, pas d'une police bizarre. Airbnb (refonte 2025) a remis du volume dans ses icônes. Things soigne chaque micro-animation, et Headspace s'appuie sur des formes simples et chaudes. À retenir : <strong>une seule audace par écran</strong>, un ton de voix assumé, de la matière plutôt que du plat gris. <em>Notes tirées de ma connaissance de ces apps, sans source dédiée.</em></p>
+      <div class="src"><a href="https://ixd.prattsi.org/2026/09/design-critique-partiful-ios-app/">Critique Partiful</a><a href="https://culturedcode.com/things/">Things</a></div>
+    </article>
+    <article class="note">
+      <h3>Tendances 2026</h3>
+      <p>Les sources convergent : <strong>« la personnalité bat le poli générique »</strong>, volume tactile doux, néo-brutalisme coloré, feuilles glissantes en bas d'écran, micro-interactions utiles. Les sources sont surtout des blogs d'outils, donc à prendre comme des signaux, pas comme une vérité.</p>
+      <div class="src"><a href="https://trends.daisyui.com/ui-design-trends-2026/">daisyUI, 18 tendances</a><a href="https://mobbin.com/">Mobbin</a><a href="https://godly.website/">Godly</a></div>
+    </article>
+  </div>
+  <div class="rules">
+    <div class="note"><h3>Ce qu'on garde</h3><ul><li>L'anatomie de carte à collectionner pour les signalements.</li><li>Des boutons qui s'enfoncent, des ombres colorées.</li><li>Les actions dans le tiers bas de l'écran.</li><li>Les chiffres traduits en objets (rareté, badges).</li><li>Un ton complice, constant partout.</li></ul></div>
+    <div class="note"><h3>Ce qu'on s'interdit</h3><ul><li>Poké Ball, sprites, polices officielles, symboles de rareté officiels.</li><li>Dégradés violet-bleu, verre dépoli partout, blobs flous.</li><li>Gris neutres et radius de 8 px uniformes.</li><li>Emojis en guise d'icônes.</li><li>Holo partout : il perdrait sa valeur.</li></ul></div>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="dirs">
+  <span class="eyebrow">Style tiles</span>
+  <h2 id="dirs">Les trois directions</h2>
+
+  <!-- ═══ A ═══ -->
+  <article class="tile ta" aria-labelledby="ta-h">
+    <div class="tile-head">
+      <span class="tag">Direction A</span>
+      <h2 id="ta-h">Classeur</h2>
+      <p>L'app comme un classeur de collection posé sur la table. Papier crème, encre bleu nuit, traits épais, cartes qu'on a envie de ranger en pochette. Le rouge est réservé à l'action « Signaler », le jaune aux célébrations. La plus fidèle à ton brief, la plus « objet ».</p>
+    </div>
+    <div class="grid2">
+      <div class="stack">
+        <span class="lbl">Palette</span>
+        <div class="swatches">
+          <div class="sw" style="background:var(--a-bg);box-shadow:inset 0 0 0 2px var(--a-ink)"><b>Papier</b>fond</div>
+          <div class="sw" style="background:var(--a-ink);color:var(--a-bg)"><b>Encre</b>texte, traits</div>
+          <div class="sw" style="background:var(--a-red);color:#fff"><b>Rouge</b>action</div>
+          <div class="sw" style="background:var(--a-yel);color:#1B2A4A"><b>Électrik</b>accent</div>
+          <div class="sw" style="background:var(--a-card);box-shadow:inset 0 0 0 2px var(--a-ink)"><b>Pochette</b>cartes</div>
+          <div class="sw" style="background:var(--a-soon);color:#fff"><b>Eau</b>restock annoncé</div>
+        </div>
+        <span class="lbl">Typographie · Fredoka large + Figtree</span>
+        <p class="spec-d">Restock repéré !</p>
+        <p class="spec-b">Display 36 boosters vu en rayon il y a 12 minutes. Fredoka en chasse large (wdth 112-118) perd son côté enfantin et gagne une allure d'étiquette. Figtree reste très lisible en petit.</p>
+        <span class="lbl">Boutons et jetons</span>
+        <div class="row">
+          <button type="button" class="a-btn primary" id="a-b1"><svg class="i"><use href="#i-plus"/></svg>Signaler</button>
+          <button type="button" class="a-btn second" id="a-b2"><svg class="i"><use href="#i-nav"/></svg>Y aller</button>
+        </div>
+        <div class="row">
+          <button type="button" class="a-chip" aria-pressed="true" id="a-c1">Display</button>
+          <button type="button" class="a-chip" aria-pressed="false" id="a-c2">Coffret</button>
+          <button type="button" class="a-chip" aria-pressed="true" id="a-c3">Tin</button>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="lbl">Carte de signalement · fiabilité haute (holo)</span>
+        <div class="a-card holo idle" data-holo>
+          <div class="a-band"><span style="display:flex;gap:8px;align-items:center"><svg class="i"><use href="#i-check"/></svg>EN STOCK</span><span class="rar" aria-label="Fiabilité 3 sur 3"><svg class="i"><use href="#i-spark"/></svg><svg class="i"><use href="#i-spark"/></svg><svg class="i"><use href="#i-spark"/></svg></span></div>
+          <div class="a-art"><div class="shelf" aria-hidden="true"><div class="r"><i style="background:#E0412F"></i><i style="background:#3C7DD9"></i><i style="background:#FFC93C"></i><i style="background:#2E9E5B"></i><i style="background:#E0412F"></i><i style="background:#8B5CC2"></i></div><div class="r"><i style="background:#FFC93C"></i><i style="background:#E0412F"></i><i style="background:#3C7DD9"></i><i style="background:#3C7DD9"></i><i style="background:#2E9E5B"></i></div></div><span class="photo-tag"><svg class="i"><use href="#i-cam"/></svg>Photo</span></div>
+          <div class="a-meta">
+            <h3>Cultura Le Pontet</h3>
+            <div class="a-sub"><span style="display:inline-flex;gap:4px;align-items:center"><svg class="i"><use href="#i-pin"/></svg>4,2 km</span><span>il y a 12 min</span><span>par <b>Mewtwolf84</b> · Fiable</span></div>
+            <div class="a-prod"><span>Display 36 boosters ×3</span><span>Coffret Dresseur d'élite</span></div>
+          </div>
+          <div class="a-foot"><span style="display:inline-flex;gap:5px;align-items:center"><svg class="i"><use href="#i-users"/></svg>5 confirmations</span><div class="a-votes"><button type="button" id="a-v1"><svg class="i"><use href="#i-thumb"/></svg>Confirmé</button><button type="button" id="a-v2">Plus rien</button></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="stack">
+        <span class="lbl">Marqueurs · étiquettes de prix</span>
+        <div class="row" style="gap:18px">
+          <div class="mk-cap"><div class="a-mk" style="background:var(--a-ok)"><svg class="i"><use href="#i-check"/></svg></div>En stock</div>
+          <div class="mk-cap"><div class="a-mk" style="background:var(--a-low)"><svg class="i"><use href="#i-low"/></svg></div>Faible</div>
+          <div class="mk-cap"><div class="a-mk" style="background:var(--a-out)"><svg class="i"><use href="#i-x"/></svg></div>Épuisé</div>
+          <div class="mk-cap"><div class="a-mk" style="background:var(--a-soon)"><svg class="i"><use href="#i-clock"/></svg></div>Annoncé</div>
+          <div class="mk-cap"><div class="a-mk" style="background:var(--a-none)"><svg class="i"><use href="#i-dash"/></svg></div>Rien</div>
+          <div class="mk-cap"><div class="a-mk cl">12</div>Groupe</div>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="lbl">Badges · pins émaillés</span>
+        <div class="row">
+          <div class="badge-cap"><svg viewBox="0 0 64 72" width="60" height="68" aria-hidden="true"><path d="M32 3l25 9v22c0 17-11 28-25 35C18 62 7 51 7 34V12z" fill="var(--a-ok)" stroke="var(--a-ink)" stroke-width="4" stroke-linejoin="round"/><path d="M32 12l17 6v16c0 11-7 19-17 24-10-5-17-13-17-24V18z" fill="var(--a-card)" opacity=".9"/><g transform="translate(20 20)" stroke="var(--a-ok)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c0-9 5-15 18-16-.5 11-6 17-16 17"/><path d="M3 21l8-8"/></g></svg>Nouveau<small>premiers pas</small></div>
+          <div class="badge-cap"><svg viewBox="0 0 64 72" width="60" height="68" aria-hidden="true"><path d="M32 3l25 9v22c0 17-11 28-25 35C18 62 7 51 7 34V12z" fill="var(--a-soon)" stroke="var(--a-ink)" stroke-width="4" stroke-linejoin="round"/><path d="M32 12l17 6v16c0 11-7 19-17 24-10-5-17-13-17-24V18z" fill="var(--a-card)" opacity=".9"/><path d="M22 36l7 7 13-15" stroke="var(--a-soon)" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Fiable<small>30 pts · 80 %</small></div>
+          <div class="badge-cap"><div class="holo idle" data-holo style="position:relative;border-radius:18px;line-height:0"><svg viewBox="0 0 64 72" width="60" height="68" aria-hidden="true"><path d="M32 3l25 9v22c0 17-11 28-25 35C18 62 7 51 7 34V12z" fill="var(--a-yel)" stroke="var(--a-ink)" stroke-width="4" stroke-linejoin="round"/><path d="M32 12l17 6v16c0 11-7 19-17 24-10-5-17-13-17-24V18z" fill="var(--a-card)" opacity=".9"/><g transform="translate(18 21)" stroke="var(--a-red)" stroke-width="3" fill="none" stroke-linejoin="round"><circle cx="14" cy="14" r="11.5"/><path d="M19.5 8.5l-3 7.5-7.5 3 3-7.5z" fill="var(--a-red)"/></g></svg></div>Éclaireur<small>holo</small></div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══ B ═══ -->
+  <article class="tile tb" aria-labelledby="tb-h">
+    <div class="tile-head">
+      <span class="tag">Direction B</span>
+      <h2 id="tb-h">Expédition</h2>
+      <p>L'énergie d'un carnet d'aventure couvert d'autocollants. Aplats de couleurs « types » (Feu, Électrik, Eau, Plante) désaturés, bandeaux en biais, ombres dures décalées. La plus dynamique et la plus « jeu ». Elle demande de la discipline pour rester lisible.</p>
+    </div>
+    <div class="grid2">
+      <div class="stack">
+        <span class="lbl">Palette</span>
+        <div class="swatches">
+          <div class="sw" style="background:var(--b-bg);box-shadow:inset 0 0 0 2px var(--b-bg2)"><b>Sauge</b>fond</div>
+          <div class="sw" style="background:var(--b-ink);color:var(--b-bg)"><b>Encre</b>texte</div>
+          <div class="sw" style="background:var(--b-fire);color:#fff"><b>Feu</b>action</div>
+          <div class="sw" style="background:var(--b-volt);color:#14223C"><b>Électrik</b>accent</div>
+          <div class="sw" style="background:var(--b-water);color:#fff"><b>Eau</b>secondaire</div>
+          <div class="sw" style="background:var(--b-psy);color:#fff"><b>Psy</b>catégories</div>
+        </div>
+        <span class="lbl">Typographie · Lilita One + Atkinson Hyperlegible Next</span>
+        <p class="spec-d">Restock repéré !</p>
+        <p class="spec-b">Display 36 boosters vu en rayon il y a 12 minutes. Lilita One, condensée et ronde, a l'impact d'un titre de jeu. Atkinson Hyperlegible, dessinée pour la basse vision, compense en lisibilité.</p>
+        <span class="lbl">Boutons et jetons</span>
+        <div class="row">
+          <button type="button" class="b-btn primary" id="b-b1"><span><svg class="i"><use href="#i-plus"/></svg>Signaler</span></button>
+          <button type="button" class="b-btn second" id="b-b2"><span><svg class="i"><use href="#i-nav"/></svg>Y aller</span></button>
+        </div>
+        <div class="row">
+          <button type="button" class="b-chip" aria-pressed="true" id="b-c1">Display</button>
+          <button type="button" class="b-chip" aria-pressed="false" id="b-c2">Coffret</button>
+          <button type="button" class="b-chip" aria-pressed="true" id="b-c3">Tin</button>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="lbl">Carte de signalement · fiabilité haute (holo)</span>
+        <div class="b-card holo idle" data-holo>
+          <div class="b-band"><strong>EN STOCK !</strong><span class="rar" aria-label="Fiabilité 3 sur 3"><svg class="i"><use href="#i-spark"/></svg><svg class="i"><use href="#i-spark"/></svg><svg class="i"><use href="#i-spark"/></svg></span></div>
+          <div class="b-body">
+            <h3>Leclerc Pertuis</h3>
+            <div class="b-sub"><span>1,8 km</span><span>il y a 12 min</span><span>par <b>Sablaireau13</b></span></div>
+            <div class="b-art"><div class="shelf" aria-hidden="true"><div class="r"><i style="background:#EE5230"></i><i style="background:#1F8FAD"></i><i style="background:#FFD23F"></i><i style="background:#3A9B57"></i><i style="background:#A55CB8"></i></div><div class="r"><i style="background:#FFD23F"></i><i style="background:#EE5230"></i><i style="background:#1F8FAD"></i><i style="background:#3A9B57"></i></div></div><span class="photo-tag"><svg class="i"><use href="#i-cam"/></svg>Photo</span></div>
+            <div class="b-prod"><span style="background:var(--b-fire)">Display ×3</span><span style="background:var(--b-psy)">Coffret</span><span style="background:var(--b-water)">Blister</span></div>
+            <div class="b-foot"><span>5 confirmations</span><div class="b-votes"><button type="button" id="b-v1"><svg class="i"><use href="#i-thumb"/></svg>Confirmé</button><button type="button" id="b-v2">Plus rien</button></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="stack">
+        <span class="lbl">Marqueurs · autocollants inclinés</span>
+        <div class="row" style="gap:18px">
+          <div class="mk-cap"><div class="b-mk" style="background:var(--b-ok)"><svg class="i"><use href="#i-check"/></svg></div>En stock</div>
+          <div class="mk-cap"><div class="b-mk" style="background:var(--b-low)"><svg class="i"><use href="#i-low"/></svg></div>Faible</div>
+          <div class="mk-cap"><div class="b-mk" style="background:var(--b-out)"><svg class="i"><use href="#i-x"/></svg></div>Épuisé</div>
+          <div class="mk-cap"><div class="b-mk" style="background:var(--b-soon)"><svg class="i"><use href="#i-clock"/></svg></div>Annoncé</div>
+          <div class="mk-cap"><div class="b-mk" style="background:var(--b-none)"><svg class="i"><use href="#i-dash"/></svg></div>Rien</div>
+          <div class="mk-cap"><div class="b-mk cl">12</div>Groupe</div>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="lbl">Badges · sceaux autocollants</span>
+        <div class="row">
+          <div class="badge-cap"><svg viewBox="0 0 64 64" width="62" height="62" aria-hidden="true"><polygon class="seal" fill="var(--b-grass)" stroke="var(--b-card)" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="32" r="17" fill="var(--b-card)"/><g transform="translate(20 20)" stroke="var(--b-grass)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c0-9 5-15 18-16-.5 11-6 17-16 17"/><path d="M3 21l8-8"/></g></svg>Nouveau<small>premiers pas</small></div>
+          <div class="badge-cap"><svg viewBox="0 0 64 64" width="62" height="62" aria-hidden="true"><polygon class="seal" fill="var(--b-water)" stroke="var(--b-card)" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="32" r="17" fill="var(--b-card)"/><path d="M24 32l6 6 11-13" stroke="var(--b-water)" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Fiable<small>30 pts · 80 %</small></div>
+          <div class="badge-cap"><div class="holo idle" data-holo style="position:relative;border-radius:50%;line-height:0"><svg viewBox="0 0 64 64" width="62" height="62" aria-hidden="true"><polygon class="seal" fill="var(--b-volt)" stroke="var(--b-card)" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="32" r="17" fill="var(--b-card)"/><g transform="translate(18 18)" stroke="var(--b-fire)" stroke-width="3" fill="none" stroke-linejoin="round"><circle cx="14" cy="14" r="11"/><path d="M19.5 8.5l-3 7.5-7.5 3 3-7.5z" fill="var(--b-fire)"/></g></svg></div>Éclaireur<small>holo</small></div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══ C ═══ -->
+  <article class="tile tc" aria-labelledby="tc-h">
+    <div class="tile-head">
+      <span class="tag">Direction C</span>
+      <h2 id="tc-h">Radar de nuit</h2>
+      <p>Un gadget de poche pour chasseur nocturne. Pensée d'abord en sombre (bleu nuit profond), avec des écrans encastrés, des voyants lumineux qui pulsent et une lampe jaune pour les accents. Plus « appareil » que « carte » : très fort en sombre, plus sage en clair.</p>
+    </div>
+    <div class="grid2">
+      <div class="stack">
+        <span class="lbl">Palette</span>
+        <div class="swatches">
+          <div class="sw" style="background:var(--c-bg);box-shadow:inset 0 0 0 2px var(--c-bg2)"><b>Nuit</b>fond</div>
+          <div class="sw" style="background:var(--c-screen);color:var(--c-ink);box-shadow:inset 0 0 0 2px var(--c-bg2)"><b>Écran</b>panneaux</div>
+          <div class="sw" style="background:var(--c-red);color:#fff"><b>Rouge</b>action</div>
+          <div class="sw" style="background:var(--c-lamp);color:#141B30"><b>Lampe</b>accent</div>
+          <div class="sw" style="background:var(--c-radar);color:#0E1426"><b>Radar</b>voyants</div>
+          <div class="sw" style="background:var(--c-card);color:var(--c-ink);box-shadow:inset 0 0 0 2px var(--c-bg2)"><b>Boîtier</b>cartes</div>
+        </div>
+        <span class="lbl">Typographie · M PLUS Rounded 1c + Instrument Sans</span>
+        <p class="spec-d">Restock repéré !</p>
+        <p class="spec-b">Display 36 boosters vu en rayon il y a 12 minutes. M PLUS Rounded, ronde d'origine japonaise, est chaleureuse sans être enfantine. Instrument Sans, nette et compacte, convient aux relevés chiffrés.</p>
+        <span class="lbl">Boutons et jetons</span>
+        <div class="row">
+          <button type="button" class="c-btn primary" id="c-b1"><svg class="i"><use href="#i-plus"/></svg>Signaler</button>
+          <button type="button" class="c-btn second" id="c-b2"><svg class="i"><use href="#i-nav"/></svg>Y aller</button>
+        </div>
+        <div class="row">
+          <button type="button" class="c-chip" aria-pressed="true" id="c-c1"><span class="led"></span>Display</button>
+          <button type="button" class="c-chip" aria-pressed="false" id="c-c2"><span class="led"></span>Coffret</button>
+          <button type="button" class="c-chip" aria-pressed="true" id="c-c3"><span class="led"></span>Tin</button>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="lbl">Carte de signalement · fiabilité haute (holo)</span>
+        <div class="c-card holo idle" data-holo>
+          <div class="c-screen">
+            <div class="c-top"><span class="st"><span class="c-led"></span>En stock</span><span class="rar" aria-label="Fiabilité 3 sur 3"><svg class="i"><use href="#i-spark"/></svg><svg class="i"><use href="#i-spark"/></svg><svg class="i"><use href="#i-spark"/></svg></span></div>
+            <div class="c-art"><div class="shelf" aria-hidden="true"><div class="r"><i style="background:#E2483B"></i><i style="background:#4D7CF0"></i><i style="background:#F2B705"></i><i style="background:#14A37A"></i><i style="background:#E2483B"></i></div><div class="r"><i style="background:#F2B705"></i><i style="background:#4D7CF0"></i><i style="background:#14A37A"></i><i style="background:#E2483B"></i></div></div><span class="photo-tag"><svg class="i"><use href="#i-cam"/></svg>Photo</span></div>
+            <div class="c-read"><span>DIST <b>2,4 km</b></span><span>VU <b>−12 min</b></span><span>CONF <b>5</b></span></div>
+          </div>
+          <div class="c-body">
+            <h3>Micromania Aix Jas de Bouffan</h3>
+            <div class="c-prod"><span>Display 36 boosters ×3</span><span>Tin</span></div>
+            <div class="c-foot"><span>par <b style="color:var(--c-ink)">Lunelune</b></span><div class="c-votes"><button type="button" id="c-v1"><svg class="i"><use href="#i-thumb"/></svg>Confirmé</button><button type="button" id="c-v2">Plus rien</button></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="stack">
+        <span class="lbl">Marqueurs · voyants, « ping » radar sur le stock frais</span>
+        <div class="row" style="gap:18px">
+          <div class="mk-cap"><div class="c-mk ping" style="--mk:var(--c-ok)"><i><svg class="i"><use href="#i-check"/></svg></i></div>En stock</div>
+          <div class="mk-cap"><div class="c-mk" style="--mk:var(--c-low)"><i><svg class="i"><use href="#i-low"/></svg></i></div>Faible</div>
+          <div class="mk-cap"><div class="c-mk" style="--mk:var(--c-out)"><i><svg class="i"><use href="#i-x"/></svg></i></div>Épuisé</div>
+          <div class="mk-cap"><div class="c-mk" style="--mk:var(--c-soon)"><i><svg class="i"><use href="#i-clock"/></svg></i></div>Annoncé</div>
+          <div class="mk-cap"><div class="c-mk" style="--mk:var(--c-none)"><i><svg class="i"><use href="#i-dash"/></svg></i></div>Rien</div>
+          <div class="mk-cap"><div class="c-mk cl"><i>12</i></div>Groupe</div>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="lbl">Badges · puces hexagonales</span>
+        <div class="row">
+          <div class="badge-cap"><svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true"><path d="M32 4l24 14v28L32 60 8 46V18z" fill="var(--c-card)" stroke="var(--c-ok)" stroke-width="3" stroke-linejoin="round"/><path d="M32 12l17 10v20L32 52 15 42V22z" fill="var(--c-screen)"/><g transform="translate(20 20)" stroke="var(--c-ok)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c0-9 5-15 18-16-.5 11-6 17-16 17"/><path d="M3 21l8-8"/></g></svg>Nouveau<small>premiers pas</small></div>
+          <div class="badge-cap"><svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true"><path d="M32 4l24 14v28L32 60 8 46V18z" fill="var(--c-card)" stroke="var(--c-soon)" stroke-width="3" stroke-linejoin="round"/><path d="M32 12l17 10v20L32 52 15 42V22z" fill="var(--c-screen)"/><path d="M24 32l6 6 11-13" stroke="var(--c-soon)" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Fiable<small>30 pts · 80 %</small></div>
+          <div class="badge-cap"><div class="holo idle" data-holo style="position:relative;border-radius:16px;line-height:0"><svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true"><path d="M32 4l24 14v28L32 60 8 46V18z" fill="var(--c-card)" stroke="var(--c-lamp)" stroke-width="3" stroke-linejoin="round"/><path d="M32 12l17 10v20L32 52 15 42V22z" fill="var(--c-screen)"/><g transform="translate(18 18)" stroke="var(--c-lamp)" stroke-width="3" fill="none" stroke-linejoin="round"><circle cx="14" cy="14" r="11"/><path d="M19.5 8.5l-3 7.5-7.5 3 3-7.5z" fill="var(--c-lamp)"/></g></svg></div>Éclaireur<small>holo</small></div>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="block" aria-labelledby="cmp-h">
+  <span class="eyebrow">Comparer</span>
+  <h2 id="cmp-h">Les trois paires de polices et ce qu'elles impliquent</h2>
+  <div class="cmp">
+    <table>
+      <thead><tr><th>Direction</th><th>Titres / texte</th><th>Pourquoi</th><th>Risque</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A · Classeur</strong></td><td>Fredoka (chasse large) / Figtree</td><td>Ronde mais structurée en version large, lisible en petit, variable donc un seul fichier.</td><td>Fredoka en graisse forte et chasse normale devient vite enfantine : on la bride en tokens.</td></tr>
+        <tr><td><strong>B · Expédition</strong></td><td>Lilita One / Atkinson Hyperlegible Next</td><td>Impact « titre de jeu » et texte pensé pour l'accessibilité.</td><td>Lilita n'a qu'une graisse. L'ensemble peut sembler bruyant sur les écrans denses (fil, admin).</td></tr>
+        <tr><td><strong>C · Radar de nuit</strong></td><td>M PLUS Rounded 1c / Instrument Sans</td><td>Rondeur douce d'inspiration japonaise, données nettes, superbe en sombre.</td><td>Plus froide en clair, et moins « carte à collectionner » que A et B.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="reco">
+    <span class="eyebrow">Ma recommandation</span>
+    <h3>A · Classeur, avec le sombre de C</h3>
+    <p>A répond le plus directement à ton brief : papier crème, encre bleu nuit, rouge rare, jaune de célébration, et une carte de signalement qui est vraiment une carte. Son mode sombre « classeur de nuit » peut emprunter à C le voyant lumineux et le « ping » radar sur les marqueurs de stock frais. Ces deux détails rendent la carte vivante sans changer d'identité. B est la plus fun, mais la plus difficile à garder lisible sur le fil et dans l'admin.</p>
+    <p class="muted">Réponds avec A, B, C ou un mélange (par exemple « A, avec les badges de B »). Ensuite je crée les tokens, la page /design et la front-end spec.</p>
+  </div>
+</section>
+
+<footer class="muted" style="font-size:13px">Aucun visuel, logo, police ni symbole officiel n'est utilisé. Les rayonnages de la photo sont des boîtes génériques. Projet non affilié à Nintendo, The Pokémon Company ou Creatures.</footer>
+</div>
+
+<script>
+(function(){
+  // seal polygons for direction B badges
+  var pts=[];for(var k=0;k<32;k++){var r=k%2?27:30.5,a=Math.PI*2*k/32;pts.push((32+r*Math.cos(a)).toFixed(2)+','+(32+r*Math.sin(a)).toFixed(2));}
+  document.querySelectorAll('polygon.seal').forEach(function(p){p.setAttribute('points',pts.join(' '));});
+
+  // theme toggle
+  var root=document.documentElement,btns=document.querySelectorAll('.themebar button');
+  function apply(t){if(t)root.setAttribute('data-theme',t);else root.removeAttribute('data-theme');btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.t===(t||'')));});}
+  var saved='';try{saved=localStorage.getItem('rr-theme')||'';}catch(e){}
+  apply(saved);
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.dataset.t);try{localStorage.setItem('rr-theme',b.dataset.t);}catch(e){}});});
+
+  // chips toggle
+  document.querySelectorAll('.a-chip,.b-chip,.c-chip').forEach(function(c){c.addEventListener('click',function(){c.setAttribute('aria-pressed',String(c.getAttribute('aria-pressed')!=='true'));});});
+
+  // holo: follow pointer
+  document.querySelectorAll('[data-holo]').forEach(function(el){
+    el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();var x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;el.classList.remove('idle');el.style.setProperty('--mx',x+'%');el.style.setProperty('--my',y+'%');el.style.setProperty('--ang',(100+x*0.5)+'deg');});
+    el.addEventListener('pointerleave',function(){el.classList.add('idle');el.style.removeProperty('--mx');el.style.removeProperty('--my');el.style.removeProperty('--ang');});
+  });
+})();
+</script>
