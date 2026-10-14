@@ -1,6 +1,6 @@
 # RestockRadar Fullstack Architecture Document
 
-> Agent : Architect (Winston) — BMAD v4.33 — v0.1 du 2026-10-14 — **en attente de validation du porteur avant tout code**
+> Agent : Architect (Winston) — BMAD v4.33 — v0.2 du 2026-10-14 — décisions D1 à D4 validées par le porteur
 > Entrées : [`docs/prd.md`](prd.md) v0.2, [`docs/front-end-spec.md`](front-end-spec.md) v1.0, [`docs/brief.md`](brief.md) v0.2.
 
 ## Introduction
@@ -14,6 +14,7 @@ Projet greenfield, sans starter tiers. Initialisation par `npm create vite@lates
 | Date | Version | Description | Author |
 |---|---|---|---|
 | 2026-10-14 | 0.1 | Version initiale, soumise au porteur | Architect (Winston) |
+| 2026-10-14 | 0.2 | D1 Tailwind v4, D2 Vercel, D3 Resend, D4 photos 60 j : validés | Architect (Winston) |
 
 ## High Level Architecture
 
@@ -31,7 +32,7 @@ RestockRadar est une **SPA React servie en statique** (Vercel), transformée en 
 
 **Région :** Supabase `eu-west-3` (Paris), pour la latence et le RGPD. Vercel sert le front depuis son CDN mondial.
 
-**Décisions à valider par le porteur**
+**Décisions du porteur (validées le 2026-10-14 : Tailwind v4, Vercel, SMTP Resend, rétention des photos 60 jours)**
 
 | # | Sujet | Recommandation | Alternative |
 |---|---|---|---|
@@ -2180,4 +2181,4 @@ Revue rapide avec `architect-checklist`. La passe complète sera faite par le PO
   - (2) magic link dans une PWA iOS : code OTP prévu ;
   - (3) limites Free (stockage photo, e-mails, mise en pause) : D3, D4 et surveillance ;
   - (4) fiabilité d'OpenFreeMap, sans SLA : l'URL des tuiles est dans le style JSON, donc facile à basculer (MapTiler ou Stadia en dernier recours, avec clé).
-- **Points en attente du porteur :** D1, D2, D3, D4.
+- **Décisions D1 à D4 :** validées.
