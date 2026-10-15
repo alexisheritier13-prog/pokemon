@@ -12,7 +12,7 @@ RestockRadar est une **SPA React servie en statique** (Vercel), transformée en 
 - Overpass API : import ponctuel des magasins.
 - Resend : SMTP des e-mails d'authentification (offre gratuite).
 
-**Région :** Supabase `eu-west-3` (Paris), pour la latence et le RGPD. Vercel sert le front depuis son CDN mondial.
+**Région :** Supabase `eu-west-1` (Irlande). Le projet a été créé dans cette région (et non à Paris comme prévu initialement) : c'est conforme au RGPD (UE), avec une latence légèrement supérieure et négligeable. Vercel sert le front depuis son CDN mondial.
 
 **Décisions du porteur (2026-10-14 : Tailwind v4, Vercel, rétention des photos 60 jours validés ; SMTP (D3) reporté avant ouverture publique)**
 
@@ -49,7 +49,7 @@ graph LR
   subgraph Vercel
     STATIC[Fichiers statiques + manifest]
   end
-  subgraph Supabase["Supabase (Paris)"]
+  subgraph Supabase["Supabase (Irlande)"]
     AUTH[Auth<br/>magic link / Google / Apple]
     REST[PostgREST<br/>RPC + tables RLS]
     RT[Realtime<br/>Postgres Changes]
