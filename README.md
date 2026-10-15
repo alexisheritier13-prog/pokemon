@@ -25,20 +25,21 @@ npm run dev
 
 ## Scripts
 
-| Commande                          | Rôle                                              |
-| --------------------------------- | ------------------------------------------------- |
-| `npm run dev`                     | Serveur de développement                          |
-| `npm run build`                   | Typecheck et build de production dans `dist/`     |
-| `npm run preview`                 | Sert le build localement                          |
-| `npm run lint`                    | ESLint                                            |
-| `npm run format` / `format:check` | Prettier                                          |
-| `npm run typecheck`               | Vérification TypeScript                           |
-| `npm run test`                    | Tests Vitest (`-- --run` pour une seule passe)    |
-| `npm run size`                    | Budget du bundle initial (200 ko gzip maximum)    |
-| `npm run db:start` / `db:stop`    | Démarre ou arrête Supabase en local (Docker)      |
-| `npm run db:reset`                | Recrée la base locale depuis les migrations       |
-| `npm run db:types`                | Régénère `src/types/database.ts`                  |
-| `npm run test:int`                | Tests d'intégration (RLS, RPC) sur la base locale |
+| Commande                          | Rôle                                                            |
+| --------------------------------- | --------------------------------------------------------------- |
+| `npm run dev`                     | Serveur de développement                                        |
+| `npm run build`                   | Typecheck et build de production dans `dist/`                   |
+| `npm run preview`                 | Sert le build localement                                        |
+| `npm run lint`                    | ESLint                                                          |
+| `npm run format` / `format:check` | Prettier                                                        |
+| `npm run typecheck`               | Vérification TypeScript                                         |
+| `npm run test`                    | Tests Vitest (`-- --run` pour une seule passe)                  |
+| `npm run size`                    | Budget du bundle initial (200 ko gzip maximum)                  |
+| `npm run db:start` / `db:stop`    | Démarre ou arrête Supabase en local (Docker)                    |
+| `npm run db:reset`                | Recrée la base locale depuis les migrations                     |
+| `npm run db:types`                | Régénère `src/types/database.ts`                                |
+| `npm run test:int`                | Tests d'intégration (RLS, RPC) sur la base locale               |
+| `npm run osm:import`              | Importe les magasins OSM (84, 13) — `-- --dry-run` pour simuler |
 
 ## Base de données
 
@@ -50,6 +51,7 @@ npm run dev
   npx supabase link --project-ref zdittonhmveidzpyldhj   # mot de passe de la base demandé
   npx supabase db push
   ```
+- **Magasins** : `npm run osm:import -- --dry-run` (simulation), puis `npm run osm:import`. Cible par défaut : la base locale. Pour la prod, définir `SUPABASE_URL` et `SUPABASE_SERVICE_ROLE_KEY` dans le terminal (voir `docs/stories/1.7.import-osm-catalogue.md`). Ré-exécutable sans doublon.
 - **Devenir admin** (une fois inscrit dans l'app) : dans le SQL Editor du dashboard Supabase, exécuter
   `update public.profiles set role = 'admin' where pseudo = 'TonPseudo';`
 
