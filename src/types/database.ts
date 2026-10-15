@@ -185,6 +185,11 @@ isOneToOne: true
 "get_public_config":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
+"get_store":
+{ Args: { "p_store_id": string }; Returns: {
+              "address": string,"brand_kind": string,"brand_name": string,"brand_slug": string,"category_color": string,"city": string,"department": string,"id": string,"lat": number,"lng": number,"name": string,"opening_hours": string,"postcode": string,"status": Database["public"]['Enums']["store_status"]
+            }[]
+                           },
 "get_stores_within":
 { Args: { "p_lat": number,"p_limit"?: number,"p_lng": number,"p_radius_km"?: number }; Returns: {
               "brand_id": string,"city": string,"distance_m": number,"id": string,"lat": number,"lng": number,"name": string

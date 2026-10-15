@@ -16,7 +16,7 @@ Les versions sont **épinglées à la story 1.1** (dernière version stable de l
 | Routing | React Router | 7.x (data router) | Routes, lazy loading | Imposé |
 | Carte | MapLibre GL JS | 5.x | Rendu vectoriel, clusters | Imposé, sans clé |
 | Tuiles | OpenFreeMap | — | Tuiles OSM, glyphes | Gratuit, sans clé |
-| Horaires | `opening_hours` (npm) | 3.x | Parsing du format OSM | Chargé à la demande sur la fiche magasin |
+| Horaires | Analyseur maison (`src/features/store/openingHours.ts`) | — | Parsing des formats OSM courants | `opening_hours` (npm) écarté en story 2.4 : 160 ko gzip pour 251/251 cas couverts par l'analyseur maison |
 | Validation | Zod | 4.x | Schémas des formulaires, de l'env, des réponses et des Edge Functions | Imposé |
 | PWA | `vite-plugin-pwa` + Workbox | 1.x / 7.x | Manifest, precache, SW | Imposé |
 | Assets PWA | `@vite-pwa/assets-generator` | 1.x | Icônes et splash iOS | Génère toutes les tailles |
