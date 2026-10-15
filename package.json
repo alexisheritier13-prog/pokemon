@@ -15,7 +15,12 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest",
-    "size": "size-limit"
+    "size": "size-limit",
+    "test:int": "vitest run -c vitest.integration.config.ts",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:types": "supabase gen types typescript --local --schema public > src/types/database.ts"
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.3.0",
@@ -50,6 +55,7 @@
     "jsdom": "^30.1.2",
     "prettier": "^3.9.10",
     "size-limit": "^11.2.0",
+    "supabase": "^2.121.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0",
     "typescript-eslint": "^8.71.2",

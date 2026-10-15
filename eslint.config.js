@@ -15,6 +15,7 @@ export default defineConfig([
     '.claude',
     'docs',
     'supabase/functions',
+    'src/types/database.ts',
   ]),
   {
     files: ['**/*.{ts,tsx}'],

@@ -15,6 +15,10 @@
         {
           "key": "Permissions-Policy",
           "value": "geolocation=(self), camera=(self), microphone=(), payment=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://zdittonhmveidzpyldhj.supabase.co https://tiles.openfreemap.org; font-src 'self'; connect-src 'self' https://zdittonhmveidzpyldhj.supabase.co wss://zdittonhmveidzpyldhj.supabase.co https://data.geopf.fr https://tiles.openfreemap.org; worker-src 'self' blob:; child-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
         }
       ]
     },

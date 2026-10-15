@@ -5,3 +5,5 @@ package-lock.json
 .bmad-core
 .claude
 docs
+src/types/database.ts
+supabase/.temp

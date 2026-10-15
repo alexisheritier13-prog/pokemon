@@ -13,7 +13,7 @@ Vite, React 19, TypeScript, Tailwind CSS v4, React Router 7 et TanStack Query c�
 ## Prérequis
 
 - Node.js 24 LTS (voir `.nvmrc`) et npm 10 ou plus
-- À partir de la story 1.5 : Docker Desktop et la CLI Supabase, pour la base locale
+- Docker Desktop, pour la base Supabase locale (la CLI Supabase est installée par `npm install`). Sous Windows, la virtualisation (SVM / VT-x) doit être activée dans le BIOS, et WSL 2 installé.
 
 ## Installation locale
 
@@ -25,27 +25,44 @@ npm run dev
 
 ## Scripts
 
-| Commande                          | Rôle                                           |
-| --------------------------------- | ---------------------------------------------- |
-| `npm run dev`                     | Serveur de développement                       |
-| `npm run build`                   | Typecheck et build de production dans `dist/`  |
-| `npm run preview`                 | Sert le build localement                       |
-| `npm run lint`                    | ESLint                                         |
-| `npm run format` / `format:check` | Prettier                                       |
-| `npm run typecheck`               | Vérification TypeScript                        |
-| `npm run test`                    | Tests Vitest (`-- --run` pour une seule passe) |
-| `npm run size`                    | Budget du bundle initial (200 ko gzip maximum) |
+| Commande                          | Rôle                                              |
+| --------------------------------- | ------------------------------------------------- |
+| `npm run dev`                     | Serveur de développement                          |
+| `npm run build`                   | Typecheck et build de production dans `dist/`     |
+| `npm run preview`                 | Sert le build localement                          |
+| `npm run lint`                    | ESLint                                            |
+| `npm run format` / `format:check` | Prettier                                          |
+| `npm run typecheck`               | Vérification TypeScript                           |
+| `npm run test`                    | Tests Vitest (`-- --run` pour une seule passe)    |
+| `npm run size`                    | Budget du bundle initial (200 ko gzip maximum)    |
+| `npm run db:start` / `db:stop`    | Démarre ou arrête Supabase en local (Docker)      |
+| `npm run db:reset`                | Recrée la base locale depuis les migrations       |
+| `npm run db:types`                | Régénère `src/types/database.ts`                  |
+| `npm run test:int`                | Tests d'intégration (RLS, RPC) sur la base locale |
+
+## Base de données
+
+- Migrations versionnées dans [`supabase/migrations/`](supabase/migrations/). Studio local : http://127.0.0.1:54323, e-mails de test (Mailpit) : http://127.0.0.1:54324.
+- Après chaque migration : `npm run db:reset`, `npm run db:types`, puis `npm run test:int`.
+- **Appliquer en production** (projet `zdittonhmveidzpyldhj`) :
+  ```bash
+  npx supabase login
+  npx supabase link --project-ref zdittonhmveidzpyldhj   # mot de passe de la base demandé
+  npx supabase db push
+  ```
+- **Devenir admin** (une fois inscrit dans l'app) : dans le SQL Editor du dashboard Supabase, exécuter
+  `update public.profiles set role = 'admin' where pseudo = 'TonPseudo';`
 
 ## Intégration continue et déploiement
 
-- GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) lance lint, format, typecheck, tests, build et budget de bundle sur chaque push.
+- GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) lance lint, format, typecheck, tests, build et budget de bundle sur chaque push, puis les tests d'intégration sur un Supabase local.
 - Vercel déploie une preview par branche ou PR et la production sur `main`. La configuration est dans [`vercel.json`](vercel.json).
 
 ### Mise en place Vercel (une fois)
 
 1. Sur vercel.com, **Add New → Project**, puis importer le dépôt GitHub.
 2. Framework : **Vite**. Build : `npm run build`. Sortie : `dist`. Ces valeurs sont déjà dans `vercel.json`.
-3. Variables d'environnement : aucune n'est requise à ce stade (elles le deviennent à la story 1.5).
+3. Variables d'environnement : `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY` (clé publishable), de type « Config ».
 
 ## Documentation projet (méthode BMAD)
 
