@@ -78,6 +78,12 @@ describe('classify', () => {
     expect('store' in result && result.store.brand_slug).toBe('independant')
   })
 
+  it('drops drive pickup points', () => {
+    expect(classify(node({ shop: 'supermarket', name: 'Auchan Drive' }), '84', brands)).toEqual({
+      rejected: 'proximity_format',
+    })
+  })
+
   it('drops proximity formats and unbranded generalist shops', () => {
     expect(classify(node({ shop: 'supermarket', name: 'Carrefour City' }), '84', brands)).toEqual({
       rejected: 'proximity_format',

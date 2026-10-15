@@ -174,6 +174,11 @@ isOneToOne: true
             "badges":
 { Args: { "p": Omit<Database["public"]['Tables']["profiles"]['Row'], Database["public"]['Tables']["profiles"]['ComputedFields']> }; Returns: (string)[]
                            },
+"get_launch_stores":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "address": string,"brand_kind": string,"brand_name": string,"brand_slug": string,"category_color": string,"city": string,"id": string,"lat": number,"lng": number,"name": string,"postcode": string
+            }[]
+                           },
 "get_me":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },

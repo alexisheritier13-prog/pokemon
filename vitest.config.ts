@@ -18,6 +18,8 @@ export default mergeConfig(
       setupFiles: ['./src/test/setup.ts'],
       include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.ts', 'scripts/**/*.test.ts'],
       exclude: ['tests/integration/**', 'node_modules/**'],
+      // Unit tests never talk to a real Supabase project (.env.local holds production values).
+      env: { VITE_SUPABASE_URL: '', VITE_SUPABASE_ANON_KEY: '' },
     },
   }),
 )

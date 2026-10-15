@@ -55,6 +55,9 @@ const PROXIMITY_FORMATS = [
   'vival',
   'spar',
   'proxi',
+  // Pickup points, no shelves to browse.
+  'drive',
+  'click and collect',
 ]
 
 export function normalize(value: string): string {

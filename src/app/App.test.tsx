@@ -1,14 +1,25 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { ToastProvider } from '@/components/ui/Toast'
 import { APP_VERSION } from '@/config/app'
 import { ErrorPage } from './ErrorPage'
 import { routes } from './routes'
 
+// MapLibre needs WebGL, which jsdom does not provide.
+vi.mock('@/features/map/MapView', () => ({ default: () => <div>Carte (test)</div> }))
+
 function renderAt(path: string) {
   const router = createMemoryRouter(routes, { initialEntries: [path] })
-  render(<RouterProvider router={router} />)
+  render(
+    <QueryClientProvider client={new QueryClient()}>
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
+    </QueryClientProvider>,
+  )
   return router
 }
 
@@ -37,7 +48,7 @@ describe('app shell', () => {
 
   it('navigates between tabs', async () => {
     renderAt('/')
-    await screen.findByRole('heading', { name: 'La carte arrive' })
+    await screen.findByText('Carte (test)')
     await userEvent.click(screen.getByRole('link', { name: 'Fil' }))
     expect(
       await screen.findByRole('heading', { name: 'Calme plat dans le coin' }),
