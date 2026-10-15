@@ -59,6 +59,8 @@ export const copy = {
     today: 'aujourd’hui',
     lastReportTitle: 'Dernier signalement',
     noReportYet: 'Pas de signalement récent. Tu passes devant ? Sois l’éclaireur du jour.',
+    reportedAgo: (ago: string) => `Signalé ${ago}`,
+    confirmations: (n: number) => `${n} confirmation${n > 1 ? 's' : ''}`,
     pending: 'En attente de validation',
     osmCredit: 'Données magasin : © les contributeurs OpenStreetMap',
   },

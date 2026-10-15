@@ -23,6 +23,12 @@ const store: StoreDetail = {
   opening_hours: 'Tu-Sa 10:00-12:00,14:00-19:00',
   lat: 43.95,
   lng: 4.81,
+  current_report_id: null,
+  current_status: null,
+  current_state: null,
+  current_reported_at: null,
+  current_trust: null,
+  current_confirm_count: null,
 }
 
 vi.mock('./api', () => ({

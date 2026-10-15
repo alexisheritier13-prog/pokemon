@@ -87,6 +87,58 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"report_products": {
+                  Row: {
+                    "product_id": string,"qty_estimate": number | null,"report_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "product_id": string,"qty_estimate"?: number | null,"report_id": string
+                  }
+                  Update: {
+                    "product_id"?: string,"qty_estimate"?: number | null,"report_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "report_products_product_id_fkey"
+      columns: ["product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "report_products_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "reports"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"reports": {
+                  Row: {
+                    "client_id": string,"comment": string | null,"confirm_count": number,"created_at": string,"deny_count": number,"expires_at": string,"finalized_at": string | null,"first_confirmed_at": string | null,"id": string,"is_first_of_day": boolean,"is_remote": boolean,"photo_hidden": boolean,"photo_path": string | null,"price_cents": number | null,"reported_at": string,"reporter_distance_m": number,"sold_out_count": number,"state": Database["public"]['Enums']["report_state"],"status": Database["public"]['Enums']["report_status"],"store_id": string,"thumb_path": string | null,"trust_score": number,"user_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "client_id": string,"comment"?: string | null,"confirm_count"?: number,"created_at"?: string,"deny_count"?: number,"expires_at": string,"finalized_at"?: string | null,"first_confirmed_at"?: string | null,"id"?: string,"is_first_of_day"?: boolean,"is_remote"?: boolean,"photo_hidden"?: boolean,"photo_path"?: string | null,"price_cents"?: number | null,"reported_at": string,"reporter_distance_m": number,"sold_out_count"?: number,"state"?: Database["public"]['Enums']["report_state"],"status": Database["public"]['Enums']["report_status"],"store_id": string,"thumb_path"?: string | null,"trust_score"?: number,"user_id"?: string | null
+                  }
+                  Update: {
+                    "client_id"?: string,"comment"?: string | null,"confirm_count"?: number,"created_at"?: string,"deny_count"?: number,"expires_at"?: string,"finalized_at"?: string | null,"first_confirmed_at"?: string | null,"id"?: string,"is_first_of_day"?: boolean,"is_remote"?: boolean,"photo_hidden"?: boolean,"photo_path"?: string | null,"price_cents"?: number | null,"reported_at"?: string,"reporter_distance_m"?: number,"sold_out_count"?: number,"state"?: Database["public"]['Enums']["report_state"],"status"?: Database["public"]['Enums']["report_status"],"store_id"?: string,"thumb_path"?: string | null,"trust_score"?: number,"user_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "reports_store_id_fkey"
+      columns: ["store_id"]
+isOneToOne: false
+      referencedRelation: "stores"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "reports_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"store_favorites": {
                   Row: {
                     "created_at": string,"store_id": string,"user_id": string
@@ -110,6 +162,26 @@ isOneToOne: false
       columns: ["user_id"]
 isOneToOne: false
       referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"store_slot_stats": {
+                  Row: {
+                    "dow": number,"n_90d": number,"n_all": number,"slot": number,"store_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "dow": number,"n_90d"?: number,"n_all"?: number,"slot": number,"store_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "dow"?: number,"n_90d"?: number,"n_all"?: number,"slot"?: number,"store_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "store_slot_stats_store_id_fkey"
+      columns: ["store_id"]
+isOneToOne: false
+      referencedRelation: "stores"
       referencedColumns: ["id"]
     }
                   ]
@@ -174,9 +246,41 @@ isOneToOne: true
             "badges":
 { Args: { "p": Omit<Database["public"]['Tables']["profiles"]['Row'], Database["public"]['Tables']["profiles"]['ComputedFields']> }; Returns: (string)[]
                            },
+"create_report":
+{ Args: { "p_captured_at"?: string,"p_client_id": string,"p_comment"?: string,"p_lat": number,"p_lng": number,"p_price_cents"?: number,"p_products": Json,"p_status": Database["public"]['Enums']["report_status"],"p_store_id": string }; Returns: {
+              "client_id": string,
+"comment": string | null,
+"confirm_count": number,
+"created_at": string,
+"deny_count": number,
+"expires_at": string,
+"finalized_at": string | null,
+"first_confirmed_at": string | null,
+"id": string,
+"is_first_of_day": boolean,
+"is_remote": boolean,
+"photo_hidden": boolean,
+"photo_path": string | null,
+"price_cents": number | null,
+"reported_at": string,
+"reporter_distance_m": number,
+"sold_out_count": number,
+"state": Database["public"]['Enums']["report_state"],
+"status": Database["public"]['Enums']["report_status"],
+"store_id": string,
+"thumb_path": string | null,
+"trust_score": number,
+"user_id": string | null
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "reports"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "get_launch_stores":
 { Args: Record<PropertyKey, never>; Returns: {
-              "address": string,"brand_kind": string,"brand_name": string,"brand_slug": string,"category_color": string,"city": string,"id": string,"lat": number,"lng": number,"name": string,"postcode": string
+              "address": string,"brand_kind": string,"brand_name": string,"brand_slug": string,"category_color": string,"city": string,"current_report_id": string,"current_reported_at": string,"current_state": Database["public"]['Enums']["report_state"],"current_trust": number,"id": string,"lat": number,"lng": number,"name": string,"postcode": string,"status": Database["public"]['Enums']["report_status"]
             }[]
                            },
 "get_me":
@@ -187,7 +291,7 @@ isOneToOne: true
                            },
 "get_store":
 { Args: { "p_store_id": string }; Returns: {
-              "address": string,"brand_kind": string,"brand_name": string,"brand_slug": string,"category_color": string,"city": string,"department": string,"id": string,"lat": number,"lng": number,"name": string,"opening_hours": string,"postcode": string,"status": Database["public"]['Enums']["store_status"]
+              "address": string,"brand_kind": string,"brand_name": string,"brand_slug": string,"category_color": string,"city": string,"current_confirm_count": number,"current_report_id": string,"current_reported_at": string,"current_state": Database["public"]['Enums']["report_state"],"current_status": Database["public"]['Enums']["report_status"],"current_trust": number,"department": string,"id": string,"lat": number,"lng": number,"name": string,"opening_hours": string,"postcode": string,"status": Database["public"]['Enums']["store_status"]
             }[]
                            },
 "get_stores_within":
@@ -200,10 +304,13 @@ isOneToOne: true
                            },
 "svc_client_error_count":
 { Args: { "p_since": string }; Returns: number
+                           },
+"svc_run_jobs":
+{ Args: Record<PropertyKey, never>; Returns: undefined
                            }
           }
           Enums: {
-            "app_role": "user"|"admin","product_type": "booster"|"blister"|"display"|"etb"|"coffret"|"tin"|"bundle"|"other","push_trigger": "created"|"first_confirm","store_status": "pending"|"active"|"rejected"|"disabled"
+            "app_role": "user"|"admin","product_type": "booster"|"blister"|"display"|"etb"|"coffret"|"tin"|"bundle"|"other","push_trigger": "created"|"first_confirm","report_state": "active"|"sold_out"|"disputed"|"expired"|"hidden","report_status": "in_stock"|"low_stock"|"out_of_stock"|"restock_incoming","store_status": "pending"|"active"|"rejected"|"disabled"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -319,7 +426,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "app_role": ["user", "admin"],"product_type": ["booster", "blister", "display", "etb", "coffret", "tin", "bundle", "other"],"push_trigger": ["created", "first_confirm"],"store_status": ["pending", "active", "rejected", "disabled"]
+            "app_role": ["user", "admin"],"product_type": ["booster", "blister", "display", "etb", "coffret", "tin", "bundle", "other"],"push_trigger": ["created", "first_confirm"],"report_state": ["active", "sold_out", "disputed", "expired", "hidden"],"report_status": ["in_stock", "low_stock", "out_of_stock", "restock_incoming"],"store_status": ["pending", "active", "rejected", "disabled"]
           }
         }
 } as const

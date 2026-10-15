@@ -17,6 +17,12 @@ export type StoreDetail = {
   opening_hours: string | null
   lat: number
   lng: number
+  current_report_id: string | null
+  current_status: 'in_stock' | 'low_stock' | 'out_of_stock' | 'restock_incoming' | null
+  current_state: 'active' | 'sold_out' | null
+  current_reported_at: string | null
+  current_trust: number | null
+  current_confirm_count: number | null
 }
 
 export function useStore(storeId: string | undefined) {

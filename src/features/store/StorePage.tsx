@@ -11,12 +11,14 @@ import { EmptyState } from '@/components/ui/EmptyState'
 import { PressButton } from '@/components/ui/PressButton'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { StatusBand } from '@/components/ui/StatusBand'
+import { rarityFromTrust } from '@/components/ui/status'
 import { useToast } from '@/components/ui/toast-context'
 import { copy } from '@/copy/fr'
 import { useAuth } from '@/features/auth/auth-context'
 import { rememberReturnTo } from '@/features/auth/returnTo'
 import { cn } from '@/lib/cn'
 import { directionsUrl } from '@/lib/directions'
+import { timeAgo } from '@/lib/time'
 import { useFavorite, useStore, type StoreDetail } from './api'
 import {
   dayName,
@@ -195,8 +197,25 @@ function StoreContent({ store }: { store: StoreDetail }) {
             {copy.store.lastReportTitle}
           </h2>
           <Card className="flex flex-col gap-3">
-            <StatusBand status="none" />
-            <p className="px-1 text-small text-ink-2">{copy.store.noReportYet}</p>
+            {store.current_status && store.current_reported_at ? (
+              <>
+                <StatusBand
+                  status={store.current_status}
+                  rarity={rarityFromTrust(store.current_trust ?? 0)}
+                />
+                <p className="px-1 text-small text-ink-2">
+                  {copy.store.reportedAgo(timeAgo(store.current_reported_at))}
+                  {store.current_confirm_count
+                    ? ` · ${copy.store.confirmations(store.current_confirm_count)}`
+                    : ''}
+                </p>
+              </>
+            ) : (
+              <>
+                <StatusBand status="none" />
+                <p className="px-1 text-small text-ink-2">{copy.store.noReportYet}</p>
+              </>
+            )}
           </Card>
         </section>
       </div>
