@@ -8,6 +8,8 @@ const envSchema = z.object({
   VITE_VAPID_PUBLIC_KEY: z.optional(z.string().check(z.minLength(1))),
   VITE_GEOCODER_URL: z._default(z.url(), 'https://data.geopf.fr/geocodage'),
   VITE_APP_ENV: z._default(z.enum(['local', 'preview', 'production']), 'local'),
+  // Comma-separated sign-in methods shown on the login screen. Apple stays off until configured.
+  VITE_AUTH_PROVIDERS: z._default(z.string(), 'email'),
 })
 
 export type Env = z.infer<typeof envSchema>

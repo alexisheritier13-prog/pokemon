@@ -88,7 +88,10 @@ Deno.serve(async (req) => {
 | 3 | `push-test` | Client (JWT), bouton du Compte | Notification de test vers les abonnements de l'appelant | 4.4 |
 | 4 | `delete-account` | Client (JWT), double confirmation | Anonymisation des signalements, suppression des photos, puis `auth.admin.deleteUser` (cascade) | 5.5 |
 | 5 | `maintenance` | Cron nocturne (`pg_net`) | Purge des photos au-delà de la rétention (D4) et des abonnements en échec répété | 2.7 / 5.5 |
-| — | `spike-webpush` | Manuel | Spike de faisabilité de `web-push` sous Deno, **supprimé après la story 1.6** | 1.6 |
+| — | `spike-webpush` | Manuel | Spike de faisabilité de `web-push` sous Deno : **concluant**, fonction supprimée | 1.6 |
+
+> **Spike `web-push` sous Deno (story 1.6, 2026-10-15) : CONCLUANT.** Dans `supabase-edge-runtime` 1.77.4 (compatible Deno 2.1.4), `npm:web-push@3.6.7` génère les clés VAPID, chiffre la charge utile en `aes128gcm` pour un abonnement P-256 simulé, et produit l'en-tête `Authorization: vapid …` avec TTL et urgence. **Décision : on garde `web-push`** (stack imposée). La fonction `spike-webpush` a été supprimée après le test.
+
 
 ## Database Architecture
 

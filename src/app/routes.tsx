@@ -47,6 +47,18 @@ export const routes: RouteObject[] = [
               Component: (await import('@/features/account/AccountPage')).AccountPage,
             }),
           },
+          {
+            path: 'connexion',
+            lazy: async () => ({
+              Component: (await import('@/features/auth/LoginPage')).LoginPage,
+            }),
+          },
+          {
+            path: 'auth/callback',
+            lazy: async () => ({
+              Component: (await import('@/features/auth/AuthCallbackPage')).AuthCallbackPage,
+            }),
+          },
           ...devRoutes,
           { path: '*', element: <NotFoundPage /> },
         ],

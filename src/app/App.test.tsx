@@ -38,8 +38,10 @@ describe('app shell', () => {
   it('navigates between tabs', async () => {
     renderAt('/')
     await screen.findByRole('heading', { name: 'La carte arrive' })
-    await userEvent.click(screen.getAllByRole('link', { name: 'Compte' })[0]!)
-    expect(await screen.findByRole('heading', { name: 'Ta carte de chasseur' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('link', { name: 'Fil' }))
+    expect(
+      await screen.findByRole('heading', { name: 'Calme plat dans le coin' }),
+    ).toBeInTheDocument()
   })
 
   it('renders the not-found page inside the shell for unknown routes', async () => {
