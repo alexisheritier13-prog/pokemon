@@ -2,38 +2,26 @@ import { CrosshairIcon, ListBulletsIcon, MapTrifoldIcon } from '@phosphor-icons/
 import { lazy, Suspense, useMemo, useState } from 'react'
 import { Chip } from '@/components/ui/Chip'
 import { PressButton } from '@/components/ui/PressButton'
-import { Sheet } from '@/components/ui/Sheet'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { useToast } from '@/components/ui/toast-context'
 import { copy } from '@/copy/fr'
 import { LAUNCH_CENTER, LAUNCH_ZOOM, type LatLng } from '@/lib/geo'
+import { useConsentedLocation } from '@/features/location/useConsentedLocation'
 import { useUiStore } from '@/lib/uiStore'
 import { useLaunchStores } from './api'
 import { StoreList } from './StoreList'
 import { StoreSheet } from './StoreSheet'
-import { useGeolocation } from './useGeolocation'
 import { ZoneSearch } from './ZoneSearch'
 
 // MapLibre (~230 kB gzip) only loads when the map view is shown.
 const MapView = lazy(() => import('./MapView'))
 
-const CONSENT_KEY = 'rr-geo-explained'
-
-function consentGiven(): boolean {
-  try {
-    return localStorage.getItem(CONSENT_KEY) === '1'
-  } catch {
-    return false
-  }
-}
-
 export function MapPage() {
   const { data: stores = [], isError } = useLaunchStores()
   const { viewMode, setViewMode, zone, setZone } = useUiStore()
-  const { state: geo, locate } = useGeolocation()
+  const { state: geo, request: locate, consentSheet } = useConsentedLocation()
   const toast = useToast()
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [consentOpen, setConsentOpen] = useState(false)
 
   const userPosition = geo.status === 'located' ? geo.position : null
   // Distances use the precise position when known (memory only), else the saved zone.
@@ -56,10 +44,7 @@ export function MapPage() {
     }
   }
 
-  const aroundMe = () => {
-    if (consentGiven()) void runLocate()
-    else setConsentOpen(true)
-  }
+  const aroundMe = () => void runLocate()
 
   return (
     <div className="flex flex-1 flex-col">
@@ -123,28 +108,7 @@ export function MapPage() {
 
       <StoreSheet store={selected} origin={origin} onClose={() => setSelectedId(null)} />
 
-      <Sheet open={consentOpen} onOpenChange={setConsentOpen} title={copy.map.consentTitle}>
-        <div className="flex flex-col gap-4">
-          <p className="text-body text-ink-2">{copy.map.consentBody}</p>
-          <PressButton
-            fullWidth
-            onClick={() => {
-              try {
-                localStorage.setItem(CONSENT_KEY, '1')
-              } catch {
-                // ignore: we will simply explain again next time
-              }
-              setConsentOpen(false)
-              void runLocate()
-            }}
-          >
-            {copy.map.consentAccept}
-          </PressButton>
-          <PressButton variant="ghost" fullWidth onClick={() => setConsentOpen(false)}>
-            {copy.map.consentDecline}
-          </PressButton>
-        </div>
-      </Sheet>
+      {consentSheet}
     </div>
   )
 }
